@@ -1,0 +1,3 @@
+<launch>
+  <node pkg="tetra_interface" exec="tetra_interface" name="tetra_interface" output="screen" />
+</launch>
