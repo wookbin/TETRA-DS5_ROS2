@@ -12,7 +12,7 @@ from launch_ros.actions import Node
 # this is the function launch  system will look for
 def generate_launch_description():
 
-        tetra_node = Node(
+    tetra_node = Node(
         package='tetra', 
         executable='tetra',
         output='screen',
