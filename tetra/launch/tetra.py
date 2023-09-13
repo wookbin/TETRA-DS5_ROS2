@@ -12,11 +12,18 @@ from launch_ros.actions import Node
 # this is the function launch  system will look for
 def generate_launch_description():
 
+        tetra_node = Node(
+        package='tetra', 
+        executable='tetra',
+        output='screen',
+        parameters=[
+            {"m_bEKF_option": False}
+        ]
+    )
+
     # create and return launch description object
     return LaunchDescription(
         [
-            ExecuteProcess(
-                cmd=["ros2", "run", "tetra", "tetra"], output="screen"
-            ),
+            tetra
         ]
     )
