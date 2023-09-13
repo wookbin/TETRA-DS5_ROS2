@@ -12,10 +12,8 @@
 //#include "pcl/point_cloud.hpp"
 //#include "pcl/point_types.hpp"
 #include "pcl_conversions/pcl_conversions.h"
-
 //Custom Message//
 #include "interfaces/msg/gpio.hpp"
-
 // //Custom Service//
 #include "interfaces/srv/led_control.hpp"
 #include "interfaces/srv/led_toggle_control.hpp"
@@ -109,7 +107,7 @@ int m_imode_status = 0;
 int m_iPowerCheck = 0;
 int m_iPowerCheckCount = 0;
 //Ultrasonic data//
-bool m_bUltrasonic_Option = false; // true or false
+bool m_bUltrasonic_option = false; // true or false
 double m_dUltrasonic[8] = {0.0, };  //Max Ultrasonic: 8ea (TETRA-DS used 4ea _ Option !)
 sensor_msgs::msg::Range range_msg1; //Ultrasonic_1
 sensor_msgs::msg::Range range_msg2; //Ultrasonic_2
@@ -121,7 +119,7 @@ interfaces::msg::Gpio gpio_msg;
 int m_iOutput[8] = {0,};
 int m_iInput[8] = {0,};
 //Conveyor  & sensor status _ Option//
-bool m_bConveyor_Option = false; //true or false
+bool m_bConveyor_option = false; //true or false
 int  m_dConveyor_sensor = 0; 
 int  m_iConveyor_movement = 0;
 //File read & write
@@ -177,102 +175,114 @@ public:
 
 		//Subscribe list//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		
-		
-
 		//Service list////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		led_control_srv = create_service<interfaces::srv::LedControl>(
-        "led_cmd", 
+        	"led_cmd", 
 		std::bind(&TETRA_INTERFACE::LED_Control_Command, this, std::placeholders::_1, std::placeholders::_2));
 
 		led_toggle_control_srv = create_service<interfaces::srv::LedToggleControl>(
-        "led_toggle_cmd", 
+        	"led_toggle_cmd", 
 		std::bind(&TETRA_INTERFACE::LED_Toggle_Command, this, std::placeholders::_1, std::placeholders::_2));
 
 		toggle_on_srv = create_service<interfaces::srv::ToggleOn>(
-        "turn_on_cmd", 
+        	"turn_on_cmd", 
 		std::bind(&TETRA_INTERFACE::Toggle_On_Command, this, std::placeholders::_1, std::placeholders::_2));
 
 		integrallog_srv = create_service<interfaces::srv::Integrallog>(
-        "log_cmd", 
+        	"log_cmd", 
 		std::bind(&TETRA_INTERFACE::Integrallog_Command, this, std::placeholders::_1, std::placeholders::_2));
 
 		power_set_outport_srv = create_service<interfaces::srv::PowerSetOutport>(
-        "Power_outport_cmd", 
+        	"Power_outport_cmd", 
 		std::bind(&TETRA_INTERFACE::Power_Set_Outport_Command, this, std::placeholders::_1, std::placeholders::_2));
 
 		power_set_single_outport_srv = create_service<interfaces::srv::PowerSetSingleOutport>(
-        "Power_single_outport_cmd", 
+        	"Power_single_outport_cmd", 
 		std::bind(&TETRA_INTERFACE::Power_Set_Single_Outport_Command, this, std::placeholders::_1, std::placeholders::_2));
 
 		power_get_io_status_srv = create_service<interfaces::srv::PowerGetIoStatus>(
-        "Power_io_status_cmd", 
+        	"Power_io_status_cmd", 
 		std::bind(&TETRA_INTERFACE::Power_Get_IO_Status_Command, this, std::placeholders::_1, std::placeholders::_2));
 
 		power_set_enable_srv = create_service<interfaces::srv::PowerSetEnable>(
-        "Power_enable_cmd", 
+        	"Power_enable_cmd", 
 		std::bind(&TETRA_INTERFACE::Power_Set_Enable_Command, this, std::placeholders::_1, std::placeholders::_2));
 
 		power_set_single_enable_srv = create_service<interfaces::srv::PowerSetSingleEnable>(
-        "Power_single_enable_cmd", 
+        	"Power_single_enable_cmd", 
 		std::bind(&TETRA_INTERFACE::Power_Set_Single_Enable_Command, this, std::placeholders::_1, std::placeholders::_2));
 
 		power_wheel_enable_srv = create_service<interfaces::srv::PowerWheelEnable>(
-        "Power_wheel_enable_cmd", 
+        	"Power_wheel_enable_cmd", 
 		std::bind(&TETRA_INTERFACE::Power_Wheel_Enable_Command, this, std::placeholders::_1, std::placeholders::_2));
 
 		power_parameter_read_srv = create_service<interfaces::srv::PowerParameterRead>(
-        "Power_parameter_read_cmd", 
+        	"Power_parameter_read_cmd", 
 		std::bind(&TETRA_INTERFACE::Power_Paramter_Read_Command, this, std::placeholders::_1, std::placeholders::_2));
 
 		power_parameter_write_srv = create_service<interfaces::srv::PowerParameterWrite>(
-        "Power_parameter_write_cmd", 
+        	"Power_parameter_write_cmd", 
 		std::bind(&TETRA_INTERFACE::Power_Paramter_Write_Command, this, std::placeholders::_1, std::placeholders::_2));
 
 		power_data_read_srv = create_service<interfaces::srv::PowerDataRead>(
-        "Power_data_read_cmd", 
+        	"Power_data_read_cmd", 
 		std::bind(&TETRA_INTERFACE::Power_Data_Read_Command, this, std::placeholders::_1, std::placeholders::_2));
 
 		power_adc_read_srv = create_service<interfaces::srv::PowerAdcRead>(
-        "Power_adc_read_cmd", 
+        	"Power_adc_read_cmd", 
 		std::bind(&TETRA_INTERFACE::Power_ADC_Read_Command, this, std::placeholders::_1, std::placeholders::_2));
 
 		power_version_read_srv = create_service<interfaces::srv::PowerVersionRead>(
-        "Power_version_read_cmd", 
+        	"Power_version_read_cmd", 
 		std::bind(&TETRA_INTERFACE::Power_Version_Read_Command, this, std::placeholders::_1, std::placeholders::_2));
 
 		conveyor_auto_movement_srv = create_service<interfaces::srv::ConveyorAutoMovement>(
-        "Conveyor_auto_move_cmd", 
+        	"Conveyor_auto_move_cmd", 
 		std::bind(&TETRA_INTERFACE::Conveyor_Auto_Movement_Command, this, std::placeholders::_1, std::placeholders::_2));
 
 		conveyor_manual_movement_srv = create_service<interfaces::srv::ConveyorManualMovement>(
-        "Conveyor_manual_move_cmd", 
+        	"Conveyor_manual_move_cmd", 
 		std::bind(&TETRA_INTERFACE::Conveyor_Manual_Movement_Command, this, std::placeholders::_1, std::placeholders::_2));
 
 		conveyor_parameter_read_srv = create_service<interfaces::srv::ConveyorParameterRead>(
-        "Conveyor_parameter_read_cmd", 
+        	"Conveyor_parameter_read_cmd", 
 		std::bind(&TETRA_INTERFACE::Conveyor_Parameter_Read_Command, this, std::placeholders::_1, std::placeholders::_2));
 
 		conveyor_parameter_write_srv = create_service<interfaces::srv::ConveyorParameterWrite>(
-        "Conveyor_parameter_write_cmd", 
+        	"Conveyor_parameter_write_cmd", 
 		std::bind(&TETRA_INTERFACE::Conveyor_Parameter_Write_Command, this, std::placeholders::_1, std::placeholders::_2));
 
 		conveyor_data_read_srv = create_service<interfaces::srv::ConveyorDataRead>(
-        "Conveyor_data_read_cmd", 
+        	"Conveyor_data_read_cmd", 
 		std::bind(&TETRA_INTERFACE::Conveyor_Data_Read_Command, this, std::placeholders::_1, std::placeholders::_2));
 
 		power_sonar_read_srv = create_service<interfaces::srv::PowerSonarRead>(
-        "Power_sonar_read_cmd", 
+        	"Power_sonar_read_cmd", 
 		std::bind(&TETRA_INTERFACE::Power_Sonar_Read_Command, this, std::placeholders::_1, std::placeholders::_2));
 
 		power_sonar_cmd_srv = create_service<interfaces::srv::PowerSonarCmd>(
-        "Power_sonar_start_cmd", 
+        	"Power_sonar_start_cmd", 
 		std::bind(&TETRA_INTERFACE::Power_Sonar_Command, this, std::placeholders::_1, std::placeholders::_2));
+
+		//Get ROS PARAM//
+		//Conveyor_option_param
+		this->declare_parameter("m_bConveyor_option");
+		m_bConveyor_option_param = this->get_parameter("m_bConveyor_option");
+		m_bConveyor_option = m_bConveyor_option_param.as_bool();
+	
+		//Ultrasonic_option_param
+		this->declare_parameter("m_bUltrasonic_option");
+		m_bUltrasonic_option_param = this->get_parameter("m_bUltrasonic_option");
+		m_bUltrasonic_option = m_bUltrasonic_option_param.as_bool();
 
 
 	}
 
 	////value//////////////////////////////////////////////////////////////////////////////
 	rclcpp::Time current_time, last_time;
+	rclcpp::Parameter m_bConveyor_option_param;
+	rclcpp::Parameter m_bUltrasonic_option_param;
+
 	//Publisher
 	rclcpp::Publisher<std_msgs::msg::Int32>::SharedPtr power_status_publisher;
 	rclcpp::Publisher<std_msgs::msg::Int32>::SharedPtr servo_publisher;
@@ -293,7 +303,6 @@ public:
 	rclcpp::Publisher<std_msgs::msg::Int32>::SharedPtr conveyor_sensor_publisher;
 	rclcpp::Publisher<std_msgs::msg::Int32>::SharedPtr conveyor_movement_publisher;
 	//Subscription
-
 
 
 private:
@@ -789,7 +798,7 @@ int main(int argc, char * argv[])
 
 	//init
 	tetra_interface.current_time = node->now();
-    tetra_interface.last_time = node->now();
+    	tetra_interface.last_time = node->now();
 
 
 	rclcpp::WallRate loop_rate(30); //default: 30HZ
@@ -958,7 +967,7 @@ int main(int argc, char * argv[])
 		range_msg4.header.stamp = tetra_interface.current_time ;
 
 		//Ultrasonic Publish
-		if(m_bUltrasonic_Option) //Option --> default: false
+		if(m_bUltrasonic_option) //Option --> default: false
 		{
 			tetra_interface.Ultrasonic1_publisher->publish(range_msg1);
 			tetra_interface.Ultrasonic2_publisher->publish(range_msg2);
@@ -968,7 +977,7 @@ int main(int argc, char * argv[])
 		///////////////////////////////////////////////////////////////////////////////////////
 
 		//Conveyor data Check_Option///////////////////////////////////////////////////////////
-		if(m_bConveyor_Option)
+		if(m_bConveyor_option)
 		{
 			//Conveyor Sensor status
 			std_msgs::msg::Int32 conveyor_sensor;
@@ -986,8 +995,6 @@ int main(int argc, char * argv[])
 
 		//Todo...
 		
-		
-
 		loop_rate.sleep();
     }
 
