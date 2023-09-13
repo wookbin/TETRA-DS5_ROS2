@@ -24,6 +24,6 @@ def generate_launch_description():
     # create and return launch description object
     return LaunchDescription(
         [
-            tetra
+            tetra_node
         ]
     )
