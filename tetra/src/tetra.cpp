@@ -128,12 +128,20 @@ public:
         "angular_move_cmd", 
 		std::bind(&TETRA::Angular_Move_Command, this, std::placeholders::_1, std::placeholders::_2));
 
+		
+		//PARAM
+		this->declare_parameter("m_bEKF_option");
+		m_bEKF_option_param = this->get_parameter("m_bEKF_option");
+		//Get Param
+		m_bEKF_option = m_bEKF_option_param.as_bool();
 
 	}
 
 	////value//////////////////////////////////////////////////////////////////////////////
 	rclcpp::Time current_time, last_time;
 	std::shared_ptr<tf2_ros::TransformBroadcaster> tf_broadcaster_;
+	rclcpp::Parameter m_bEKF_option_param;
+
 	//Publisher
 	rclcpp::Publisher<nav_msgs::msg::Odometry>::SharedPtr odom_publisher;
 	rclcpp::Publisher<std_msgs::msg::Int32>::SharedPtr bumper_publisher;
