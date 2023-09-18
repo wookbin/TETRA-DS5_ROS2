@@ -1,4 +1,6 @@
 # TETRA-DS5_ROS2
 TETRA-DS5 ROS2(Foxy) Version CPP package
 
+S Model 기준으로 작업...
+
 아직 작업중....
