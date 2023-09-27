@@ -82,6 +82,8 @@ int m_iParam = 0;
 //ekf_localization
 bool m_bEKF_option = false;
 bool m_bForwardCheck = false;
+//Joystick Enable & Disable
+bool m_bFlag_joy_enable = false;
 
 
 class TETRA: public rclcpp::Node
@@ -219,47 +221,61 @@ public:
 	void joyCallback(const sensor_msgs::msg::Joy::SharedPtr joy)
 	{
 		//Axis stick
-		////Two Hand Joystick
-		if(joy->axes[4])
+		if(joy->buttons[8])
 		{
-			bt_angular += joy_angular * joy->axes[4];
+			m_bFlag_joy_enable = true;
 		}
-		if(joy->axes[5])
+		if(joy->buttons[9])
 		{
-			bt_linear += joy_linear * joy->axes[5];
+			m_bFlag_joy_enable = false;
 		}
 
-		//Buttons
-		if(joy->buttons[0])
+		if(m_bFlag_joy_enable)
 		{
-			joy_angular -= 1.0;
-			if(joy_angular < 0) joy_angular = 0;
-		}
-		if(joy->buttons[1])
-		{
-			joy_linear -= 1.0;
-			if(joy_linear < 0) joy_linear = 0;
-		}
-		if(joy->buttons[2])
-		{
-			joy_angular += 1.0;
-		}
-		if(joy->buttons[3])
-		{
-			joy_linear += 1.0;
-		}
-		if(joy->buttons[5])
-		{
-				bt_linear = 0;
-				bt_angular = 0;
-				joy_linear = 1.0;
-				joy_angular = 1.0;
+			////Two Hand Joystick
+			if(joy->axes[4])
+			{
+				bt_angular += joy_angular * joy->axes[4];
+			}
+			if(joy->axes[5])
+			{
+				bt_linear += joy_linear * joy->axes[5];
+			}
+
+			//Buttons
+			if(joy->buttons[0])
+			{
+				joy_angular -= 1.0;
+				if(joy_angular < 0) joy_angular = 0;
+			}
+			if(joy->buttons[1])
+			{
+				joy_linear -= 1.0;
+				if(joy_linear < 0) joy_linear = 0;
+			}
+			if(joy->buttons[2])
+			{
+				joy_angular += 1.0;
+			}
+			if(joy->buttons[3])
+			{
+				joy_linear += 1.0;
+			}
+			if(joy->buttons[5])
+			{
+					bt_linear = 0;
+					bt_angular = 0;
+					joy_linear = 1.0;
+					joy_angular = 1.0;
+			}
+			
+			//Velocity Command//
+			linear = (joy_linear * (double)joy->axes[1] + bt_linear) / 3.0;
+			////Two Hand Joystick
+			angular = ((double)joy_angular * (joy->axes[1] >= 0 ? joy->axes[2] : (joy->axes[2] * -1) ) + bt_angular) / 3.0;
+
 		}
 		
-		//Velocity Command//
-		linear = (joy_linear * (double)joy->axes[1] + bt_linear) / 3.0;
-		////Two Hand Joystick
-		angular = ((double)joy_angular * (joy->axes[1] >= 0 ? joy->axes[2] : (joy->axes[2] * -1) ) + bt_angular) / 3.0;
 	}
 
 	void pose_resetCallback(const std_msgs::msg::Int32::SharedPtr msg)
