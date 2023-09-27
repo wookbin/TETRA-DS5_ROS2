@@ -223,11 +223,11 @@ public:
 		//Axis stick
 		if(joy->buttons[8])
 		{
-			m_bFlag_joy_enable = true;
+			m_bFlag_joy_enable = false; //back
 		}
 		if(joy->buttons[9])
 		{
-			m_bFlag_joy_enable = false;
+			m_bFlag_joy_enable = true; //start
 		}
 
 		if(m_bFlag_joy_enable)
