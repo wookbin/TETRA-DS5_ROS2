@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package format = "3">
+  <name>cyglidar_d1_ros2</name>
+  <version>0.3.0</version>
+  <description>cyglidar_ros2_driver</description>
+
+  <maintainer email="hmkim@cygbot.com">Hyunmin Kim</maintainer>
+  <license>BSD</license>
+  <author >Cygbot</author>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <depend>sensor_msgs</depend>
+  <depend>rclcpp</depend>
+  <depend>boost</depend>
+  <depend>std_msgs</depend>
+  <depend>pcl_conversions</depend>
+  <depend>pcl_ros</depend>
+  <depend>libpcl-all-dev</depend>
+  <depend>tf</depend>
+  
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
