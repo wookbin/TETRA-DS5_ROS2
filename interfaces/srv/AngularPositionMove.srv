@@ -1,0 +1,6 @@
+#This message is used to send command to tetra
+#Angular Position Mode command
+
+int32 angular_degree
+---
+bool command_result
