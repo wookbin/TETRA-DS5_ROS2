@@ -5,4 +5,6 @@ TETRA-DS5 ROS2(Foxy) Version CPP package
 
 S Model 기준으로 작업...
 
+- Main 2D Lidar는 SICK TIM571를 사용.
+
 아직 작업중....
