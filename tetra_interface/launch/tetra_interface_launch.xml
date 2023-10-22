@@ -1,0 +1,6 @@
+<launch>
+  <node pkg="tetra_interface" exec="tetra_interface" name="tetra_interface" output="screen" >
+    <param name="m_bConveyor_option" value="false"/>
+    <param name="m_bUltrasonic_option" value="false"/>
+  </node>
+</launch>
