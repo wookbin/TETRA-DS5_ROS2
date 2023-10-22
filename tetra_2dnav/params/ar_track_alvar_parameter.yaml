@@ -1,0 +1,6 @@
+/**:
+  ros__parameters:
+    marker_size: 10.0
+    max_new_marker_error: 0.05
+    max_track_error: 0.05
+    max_frequency: 30.0
