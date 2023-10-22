@@ -1,0 +1,147 @@
+<?xml version="1.0"?>
+
+<robot name="tetra" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- Define a number of dimensions using properties -->
+  <xacro:property name="base_length" value="0.473" />
+  <xacro:property name="base_radius" value="0.2365" />
+  <xacro:property name="wheel_length" value="0.047" />
+  <xacro:property name="wheel_radius" value="0.085" />
+  <xacro:property name="wheel_offset_x" value="0.0" />
+  <xacro:property name="wheel_offset_y" value="0.207" />
+  <xacro:property name="wheel_offset_z" value="-0.100" />
+  <xacro:property name="PI" value="3.1415926" />
+
+  <!-- Include all component files -->
+  <xacro:include filename="$(find tetra_description)/urdf/materials.urdf.xacro" />
+  <xacro:include filename="$(find tetra_description)/urdf/base.urdf.xacro" />
+   
+  <!-- Add the base and wheels -->
+  <!--<base name="base" color="Black"/>-->
+  
+  <link name="laser">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <box size="0.01 0.01 0.01" />
+        </geometry>
+        <material name="grey" />
+      </visual>
+  </link>
+
+  <joint name="laser_flag" type="fixed">
+    <origin xyz="0.085 0 0.251" rpy="0 0 0" />
+    <parent link="base_link"/>
+    <child link="laser" />
+  </joint>
+  
+  <link name="laser_link2">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <box size="0.01 0.01 0.01" />
+        </geometry>
+        <material name="grey" />
+      </visual>
+  </link>
+
+  <joint name="base_link_to_laser_link2" type="fixed">
+    <origin xyz="-0.318 0.0 0.2553" rpy="0 0 ${PI}" />
+    <parent link="base_link"/>
+    <child link="laser_link2" />
+  </joint>
+
+  <link name="imu_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <box size="0.01 0.01 0.01" />
+        </geometry>
+        <material name="grey" />
+      </visual>
+  </link>
+
+  <joint name="base_link_to_imu_link" type="fixed">
+    <origin xyz="0.0 0 0.232" rpy="0 0 0" />
+    <parent link="base_link"/>
+    <child link="imu_link" />
+  </joint>
+
+ <link name="camera">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <box size="0.01 0.01 0.01" />
+        </geometry>
+        <material name="grey" />
+      </visual>
+  </link>
+
+  <joint name="camera" type="fixed">
+    <!--<origin xyz="0.135 0.0 0.181" rpy="0 0 0"/>-->
+    <origin xyz="0.135 0.0 0.181" rpy="1.5708 3.14159 1.5708"/>
+    <parent link="base_link"/>
+    <child link="camera" />
+  </joint>  
+
+ <link name="front_bumper">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <box size="0.01 0.30 0.01" />
+        </geometry>
+        <material name="transparentblack" />
+      </visual>
+  </link>
+
+  <joint name="front_bumper" type="fixed">
+    <origin xyz="0.15125 0.0 -0.05" rpy="0 0 0" />
+    <parent link="base_link"/>
+    <child link="front_bumper" />
+  </joint>
+
+ <link name="camera1_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <box size="0.01 0.01 0.01" />
+        </geometry>
+        <material name="grey" />
+      </visual>
+  </link>
+
+  <joint name="camera1_link" type="fixed">
+    <origin xyz="0.1347 0.0 0.1344" rpy="0 0 0" />
+    <parent link="base_link"/>
+    <child link="camera1_link" />
+  </joint>
+
+
+ <link name="base_upperlink">
+   <visual>
+    <origin xyz=" 0 0 0 " rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://tetra_description/meshes/platform_body_u.stl" scale="0.001 0.001 0.001" />
+      </geometry>
+      <material name="transparentred"/>        
+    </visual>
+      <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <cylinder length="${base_length}" radius="${base_radius}"/>
+            </geometry>
+      </collision>
+  </link>
+
+  <joint name="base_upperlink" type="fixed">
+    <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+    <parent link="base_link"/>
+    <child link="base_upperlink" />
+  </joint>
+
+
+</robot>
+
+
+
