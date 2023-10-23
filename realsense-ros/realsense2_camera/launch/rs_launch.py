@@ -70,7 +70,7 @@ configurable_parameters = [{'name': 'camera_name',                  'default': '
                            {'name': 'enable_sync',                  'default': 'false', 'description': ''},
                            {'name': 'align_depth',                  'default': 'false', 'description': ''},
                            {'name': 'filters',                      'default': "''", 'description': ''},
-                           {'name': 'clip_distance',                'default': '-2.', 'description': ''},
+                           {'name': 'clip_distance',                'default': '2.0', 'description': ''},
                            {'name': 'linear_accel_cov',             'default': '0.01', 'description': ''},
                            {'name': 'initial_reset',                'default': 'false', 'description': ''},
                            {'name': 'allow_no_texture_points',      'default': 'false', 'description': ''},
