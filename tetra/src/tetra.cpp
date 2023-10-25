@@ -103,8 +103,8 @@ public:
 		right_error_code_publisher = this->create_publisher<std_msgs::msg::Int32>("right_error_code", 1);
 
 		//subscribe list////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		joy_subscriber = this->create_subscription<sensor_msgs::msg::Joy>("joy", 10, std::bind(&TETRA::joyCallback, this, _1));
-		cmd_vel_subscriber = this->create_subscription<geometry_msgs::msg::Twist>("cmd_vel", 100, std::bind(&TETRA::velCallback, this, _1));
+		joy_subscriber = this->create_subscription<sensor_msgs::msg::Joy>("joy", rclcpp::SensorDataQoS(), std::bind(&TETRA::joyCallback, this, _1));
+		cmd_vel_subscriber = this->create_subscription<geometry_msgs::msg::Twist>("cmd_vel", rclcpp::SensorDataQoS(), std::bind(&TETRA::velCallback, this, _1));
 		acc_subscriber = this->create_subscription<std_msgs::msg::Int32>("accel_vel", 10, std::bind(&TETRA::accelCallback, this, _1));
 		pose_reset_subscriber = this->create_subscription<std_msgs::msg::Int32>("pose_reset", 10, std::bind(&TETRA::pose_resetCallback, this, _1));
 		servo_on_subscriber = this->create_subscription<std_msgs::msg::Int32>("servo_on", 10, std::bind(&TETRA::servo_onCallback, this, _1));
