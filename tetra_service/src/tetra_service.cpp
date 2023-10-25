@@ -131,10 +131,10 @@ LAND_MARK_POSE _pLandMarkPose;
 
 typedef struct ROBOT
 {
-	int  HOME_id = 0;
-	int  m_iDocking_id = 0;
-	bool m_bFalg_DockingExit = false;
-	int  m_iCallback_Battery = 0;
+    int  HOME_id = 0;
+    int  m_iDocking_id = 0;
+    bool m_bFalg_DockingExit = false;
+    int  m_iCallback_Battery = 0;
     int  m_iCallback_ErrorCode = 0;
     int  m_iCallback_EMG = 0;
     int  m_iCallback_Bumper = 0;
@@ -206,13 +206,13 @@ public:
 
 		//subscribe list////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		ar_tag_markers_subscriber = this->create_subscription<ar_track_alvar_msgs::msg::AlvarMarkers>(
-			"ar_pose_marker", 100, std::bind(&TETRA_SERVICE::AR_tagCallback, this, _1));
+			"ar_pose_marker", rclcpp::SensorDataQoS(), std::bind(&TETRA_SERVICE::AR_tagCallback, this, _1));
 
 		sick_scan_subscriber = this->create_subscription<sensor_msgs::msg::LaserScan>(
-			"scan", 100, std::bind(&TETRA_SERVICE::SickCallback, this, _1));
+			"scan", rclcpp::SensorDataQoS(), std::bind(&TETRA_SERVICE::SickCallback, this, _1));
 		
 		cygbot_scan_subscriber = this->create_subscription<sensor_msgs::msg::LaserScan>(
-			"scan2", 100, std::bind(&TETRA_SERVICE::CygbotCallback, this, _1));
+			"scan2", rclcpp::SensorDataQoS(), std::bind(&TETRA_SERVICE::CygbotCallback, this, _1));
 
 		bumper_subscriber = this->create_subscription<std_msgs::msg::Int32>(
 			"bumper_data", 1, std::bind(&TETRA_SERVICE::BumperCallback, this, _1));
@@ -233,7 +233,7 @@ public:
 			"conveyor_movement", 1, std::bind(&TETRA_SERVICE::ConveyorMovementCallback, this, _1));
 
 		joy_subscriber = this->create_subscription<sensor_msgs::msg::Joy>(
-			"joy", 10, std::bind(&TETRA_SERVICE::joyCallback, this, _1));
+			"joy", rclcpp::SensorDataQoS(), std::bind(&TETRA_SERVICE::joyCallback, this, _1));
 
 		
 		//Service list///////////////////////////////////////////////////////////////////////////////////////
