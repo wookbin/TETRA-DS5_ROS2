@@ -1,5 +1,0 @@
-<launch>
-  <node pkg="tetra_service" exec="tetra_service" name="tetra_service" output="screen" >
-
-  </node>
-</launch>
