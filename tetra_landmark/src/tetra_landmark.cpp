@@ -97,9 +97,6 @@ public:
 		ar_tag_markers_subscriber = this->create_subscription<ar_track_alvar_msgs::msg::AlvarMarkers>(
 			"ar_pose_marker", 100, std::bind(&TETRA_LANDMARK::AR_tagCallback, this, _1));
 
-		map2marker_subscriber = this->create_subscription<ar_track_alvar_msgs::msg::AlvarMarkers>(
-			"map_to_marker_pose", 100, std::bind(&TETRA_LANDMARK::Map2Mark_Callback, this, _1));
-
 		tracked_pose_subscriber = this->create_subscription<geometry_msgs::msg::PoseStamped>(
 			"tracked_pose", 1, std::bind(&TETRA_LANDMARK::TrackedPosesCallback, this, _1));
 
@@ -131,7 +128,6 @@ public:
 
 	//Subscription ////////////////////////////////////////////////////////////////////////////////////
 	rclcpp::Subscription<ar_track_alvar_msgs::msg::AlvarMarkers>::SharedPtr ar_tag_markers_subscriber;
-	rclcpp::Subscription<ar_track_alvar_msgs::msg::AlvarMarkers>::SharedPtr map2marker_subscriber;
 	rclcpp::Subscription<geometry_msgs::msg::PoseStamped>::SharedPtr tracked_pose_subscriber;
 	rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr joy_subscriber;
 
@@ -154,14 +150,38 @@ public:
 		if (!msg->markers.empty()) 
 		{
 			//AR_Tag data update...
-			m_iAR_tag_id = msg->markers[0].id;
-			m_fAR_tag_pose_x = msg->markers[0].pose.pose.position.x;
-			m_fAR_tag_pose_y = msg->markers[0].pose.pose.position.y;
-			m_fAR_tag_pose_z = msg->markers[0].pose.pose.position.z;
-			m_fAR_tag_orientation_x = msg->markers[0].pose.pose.orientation.x;
-			m_fAR_tag_orientation_y = msg->markers[0].pose.pose.orientation.y;
-			m_fAR_tag_orientation_z = msg->markers[0].pose.pose.orientation.z;
-			m_fAR_tag_orientation_w = msg->markers[0].pose.pose.orientation.w;
+			//Green circle LandMark//////////////////////////////////////////
+			_pLandMark[0].header_frame_id = node.header.frame_id = msg->markers[0].header.frame_id;
+			node.header.stamp = rclcpp::Time();
+			node.type = visualization_msgs::msg::Marker::SPHERE;
+			_pLandMark[0].ns = node.ns = "marker_" + std::to_string(msg->markers[0].id);
+			_pLandMark[0].mark_id = m_iAR_tag_id = msg->markers[0].id;
+
+			_pLandMark[0].pose_position_x = node.pose.position.x = m_fAR_tag_pose_x = msg->markers[0].pose.pose.position.x;
+			_pLandMark[0].pose_position_y = node.pose.position.y = m_fAR_tag_pose_y = msg->markers[0].pose.pose.position.y;
+			_pLandMark[0].pose_position_z = node.pose.position.z = m_fAR_tag_pose_z = msg->markers[0].pose.pose.position.z;
+			_pLandMark[0].pose_orientation_x = node.pose.orientation.x = m_fAR_tag_orientation_x = msg->markers[0].pose.pose.orientation.x;
+			_pLandMark[0].pose_orientation_y = node.pose.orientation.y = m_fAR_tag_orientation_y = msg->markers[0].pose.pose.orientation.y;
+			_pLandMark[0].pose_orientation_z = node.pose.orientation.z = m_fAR_tag_orientation_z = msg->markers[0].pose.pose.orientation.z;
+			_pLandMark[0].pose_orientation_w = node.pose.orientation.w = m_fAR_tag_orientation_w = msg->markers[0].pose.pose.orientation.w;
+
+			// Points are green 
+			node.color.a = 0.8; 
+			node.color.r = 0.5;
+			node.color.g = 1.0; 
+			node.color.b = 0.0;  
+			node.scale.x = 0.3;
+			node.scale.y = 0.3;
+			node.scale.z = 0.3;  
+
+			if(m_bSave_Enable)
+			{
+				//Publish
+				landmark_publisher->publish(node);
+				//Save Marker data//
+				SaveLandMark(_pLandMark[0]);
+				m_bSave_Enable = false;
+			}
 		}
 		else
 		{
@@ -352,48 +372,6 @@ public:
 
 		return iResult;
 	}
-
-	//Map to AR_tag Transform
-	void Map2Mark_Callback(const ar_track_alvar_msgs::msg::AlvarMarkers::SharedPtr msg) 
-	{
-		if (!msg->markers.empty()) 
-		{
-			//Green circle LandMark//////////////////////////////////////////
-			_pLandMark[0].header_frame_id = node.header.frame_id = msg->markers[0].header.frame_id;
-			node.header.stamp = rclcpp::Time();
-			node.type = visualization_msgs::msg::Marker::SPHERE;
-			_pLandMark[0].ns = node.ns = "marker_" + std::to_string(msg->markers[0].id);
-			_pLandMark[0].mark_id = node.id = msg->markers[0].id;
-
-			node.action = visualization_msgs::msg::Marker::ADD; 
-			_pLandMark[0].pose_position_x = node.pose.position.x = msg->markers[0].pose.pose.position.x;
-			_pLandMark[0].pose_position_y = node.pose.position.y = msg->markers[0].pose.pose.position.y;
-			_pLandMark[0].pose_position_z = node.pose.position.z = msg->markers[0].pose.pose.position.z;
-			_pLandMark[0].pose_orientation_x = node.pose.orientation.x = msg->markers[0].pose.pose.orientation.x;
-			_pLandMark[0].pose_orientation_y = node.pose.orientation.y = msg->markers[0].pose.pose.orientation.y;
-			_pLandMark[0].pose_orientation_z = node.pose.orientation.z = msg->markers[0].pose.pose.orientation.z;
-			_pLandMark[0].pose_orientation_w = node.pose.orientation.w = msg->markers[0].pose.pose.orientation.w;
-
-			// Points are green 
-			node.color.a = 0.8; 
-			node.color.r = 0.5;
-			node.color.g = 1.0; 
-			node.color.b = 0.0;  
-			node.scale.x = 0.3;
-			node.scale.y = 0.3;
-			node.scale.z = 0.3;  
-
-			if(m_bSave_Enable)
-			{
-				//Publish
-				landmark_publisher->publish(node);
-				//Save Marker data//
-				SaveLandMark(_pLandMark[0]);
-				m_bSave_Enable = false;
-			}
-		}
-	}
-
 
 
 private:
