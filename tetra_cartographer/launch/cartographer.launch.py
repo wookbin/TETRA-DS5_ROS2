@@ -70,20 +70,6 @@ def generate_launch_description():
 	      ]
 	    ),
 
-	Node(
-	    package="ar_track_alvar",
-	      executable="individual_markers_no_kinect",
-	      name="ar_track_alvar2",
-	      output="screen",
-	      parameters=[{"output_frame": "map"},
-		          ar_track_alvar_parameter],
-	      remappings=[
-		# ('camera_image', 'usb_cam/image_raw'),
-		# ('camera_info', 'usb_cam/camera_info'),
-		('ar_pose_marker', 'map_to_marker_pose')
-	      ]
-	    ),
-
         DeclareLaunchArgument(
             'resolution',
             default_value=resolution,
