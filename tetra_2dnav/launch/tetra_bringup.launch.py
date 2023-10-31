@@ -93,13 +93,6 @@ def generate_launch_description():
         output='screen'
     )
     
-    # tetra_landmark
-    tetra_landmark_node = Node(
-        package='tetra_landmark', 
-        executable='tetra_landmark',
-        output='screen'
-    )
-    
     # AR_tag
     ar_track_alvar_parameter = os.path.join(
     get_package_share_directory('tetra_2dnav'),
@@ -128,7 +121,6 @@ def generate_launch_description():
             use_sim_time,
             rsp_node,
             tetra_service_node,
-            tetra_landmark_node,
             ar_track_alvar_node,
             
 		# USB Camera
