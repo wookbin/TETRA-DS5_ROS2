@@ -85,7 +85,13 @@ def generate_launch_description():
             launch_arguments={'use_sim_time': use_sim_time, 'resolution': resolution,
                               'publish_period_sec': publish_period_sec}.items(),
         ),
-
+	    
+        Node(
+            package='tetra_landmark',
+            executable='tetra_landmark',
+            name='tetra_landmark',
+            output='screen'),
+	    
         Node(
             package='rviz2',
             executable='rviz2',
