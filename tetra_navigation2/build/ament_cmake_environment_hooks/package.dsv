@@ -1,0 +1,4 @@
+source;share/tetra_navigation2/local_setup.bash
+source;share/tetra_navigation2/local_setup.dsv
+source;share/tetra_navigation2/local_setup.sh
+source;share/tetra_navigation2/local_setup.zsh
