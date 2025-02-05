@@ -1,0 +1,5 @@
+<launch>
+  <node pkg="tetra" exec="tetra" name="tetra" output="screen" >
+    <param name="m_bEKF_option" value="false"/> <!--default: false-->
+  </node>
+</launch>
