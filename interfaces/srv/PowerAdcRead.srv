@@ -1,0 +1,16 @@
+#This message is used to send command to tetra
+#PowerSensor BD acc data read command
+
+int32 num
+---
+int32 d0_adc0
+int32 d1_adc1
+int32 d2_adc2
+int32 d3_adc3
+int32 d4_adc4
+int32 d5_adc5
+int32 d6_adc6
+int32 d7_adc7
+
+bool command_result
+

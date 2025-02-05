@@ -1,0 +1,9 @@
+#This message is used to send command to tetra
+#Add Virtual Obstacles command
+
+geometry_msgs/Polygon[] polygons
+int32[] ids  # Array of IDs corresponding to polygons
+bool remove   # Use "remove" instead of "delete"
+---
+bool success
+string message
