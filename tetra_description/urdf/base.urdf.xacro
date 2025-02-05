@@ -1,0 +1,146 @@
+<?xml version="1.0"?>
+
+<robot name="tetra" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- Define a number of dimensions using properties -->
+  <xacro:property name="base_length" value="0.6127" />
+  <xacro:property name="base_radius" value="0.2452" />
+  <xacro:property name="wheel_offset_x" value="0.0" />
+  <xacro:property name="wheel_offset_y" value="0.220" />
+  <xacro:property name="wheel_offset_z" value="-0.1005" />
+  <xacro:property name="PI" value="3.1415926" />
+
+  <xacro:macro name="cylinder_inertia" params="m r h">
+        <inertia ixx="${m*(3*r*r+h*h)/12}" ixy="0" ixz="0" iyy="${m*(3*r*r+h*h)/12}" iyz="0" izz="${m*r*r/2}" />
+  </xacro:macro>
+     
+  <!-- define a wheel -->
+  <joint name="base_l_wheel_joint" type="fixed">
+    <axis xyz="0 1 0" />
+    <origin xyz="${wheel_offset_x} ${wheel_offset_y} 0" rpy="0 0 0" />
+    <parent link="base_link"/>
+    <child link="base_l_wheel_link"/>
+   </joint>
+    <link name="base_l_wheel_link">
+  <visual>
+    <origin xyz=" 0 ${-1.0*wheel_offset_y} 0 " rpy="0 0 0" />
+	<geometry>
+	  <mesh filename="package://tetra_description/meshes/wheel_drive_left.stl" scale="0.001 0.001 0.001" />
+	</geometry>
+	<material name="darkgrey"/>
+  </visual>
+    </link>
+ 
+ <joint name="base_r_wheel_joint" type="fixed">
+    <axis xyz="0 1 0" />
+    <origin xyz="${wheel_offset_x} ${-1.0*wheel_offset_y} 0" rpy="0 0 0" />
+    <parent link="base_link"/>
+    <child link="base_r_wheel_link"/>
+   </joint>
+    <link name="base_r_wheel_link">
+  <visual>
+    <origin xyz=" 0 ${wheel_offset_y} 0 " rpy="0 0 0" />
+	<geometry>
+	  <mesh filename="package://tetra_description/meshes/wheel_drive_right.stl" scale="0.001 0.001 0.001" />
+	</geometry>
+	<material name="darkgrey"/>
+  </visual>
+    </link>
+
+  <!-- The base xacro macro -->
+
+   <link name= "base_link">
+    <visual>
+    <origin xyz=" 0 0 0 " rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://tetra_description/meshes/platform_body.stl" scale="0.001 0.001 0.001" />
+      </geometry>
+      <material name="black"/>        
+    </visual>
+      <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <cylinder length="${base_length}" radius="${base_radius}"/>
+            </geometry>
+      </collision>
+    </link>
+
+  
+  <link name="base_footprint">
+      <visual>
+        <origin xyz="-0.08935 0 0" rpy="0 0 0" /> 
+        <geometry>
+	  <box size="0.6127 0.4904 0.001" />
+        </geometry>
+        <material name="transparentgreen" />
+      </visual>
+  </link>
+
+  <joint name="base_joint" type="fixed"> <!--fixed-->   
+    <origin xyz="0 0 ${-wheel_offset_z}" rpy="0 0 0" />
+    <parent link="base_footprint"/>
+    <child link="base_link" />
+  </joint>
+  
+  <!-- Rear Caster-->
+   <link name="rear_caster_rotate">
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://tetra_description/meshes/caster_yoke.stl" scale="0.001 0.001 0.001" />
+                </geometry>
+                <material name="darkgrey" />
+            </visual>
+            <collision>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://tetra_description/meshes/caster_yoke.stl" scale="0.001 0.001 0.001" />
+                </geometry>
+            </collision>
+            <inertial>
+                <mass value="0.1"/>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <xacro:cylinder_inertia m="0.1" r="0.03" h="0.03"/>
+            </inertial>
+        </link>
+
+        <joint name="rear_caster_rotate_joint" type="fixed">
+            <parent link="base_link"/>
+            <child link="rear_caster_rotate"/>
+            <origin xyz="-0.300 0 0" rpy="0 0 0"/>
+            <axis xyz="0 0 1"/>
+        </joint>
+
+        <link name="rear_caster_wheel">
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://tetra_description/meshes/caster_wheel.stl" scale="0.001 0.001 0.001" />
+                </geometry>
+                <material name="darkgrey" />
+            </visual>
+            <collision>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://tetra_description/meshes/caster_wheel.stl" scale="0.001 0.001 0.001" />
+                </geometry>
+            </collision>
+            <inertial>
+                <mass value="0.1"/>
+                <origin xyz="0 0 0" rpy="${PI/2} 0 0"/>
+                <xacro:cylinder_inertia m="0.1" r="0.06" h="0.04"/>
+            </inertial>
+        </link>
+
+        <joint name="rear_caster_wheel_joint" type="fixed">
+            <parent link="rear_caster_rotate"/>
+            <child link="rear_caster_wheel"/>
+            <origin xyz="-0.03 0 -0.06291" rpy="0 0 0"/>
+            <axis xyz="0 1 0"/>
+        </joint>
+        
+ 
+
+</robot>
+
