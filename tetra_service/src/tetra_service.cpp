@@ -299,11 +299,9 @@ FALG_VALUE _pFlag_Value;
 //dynamic parameter//
 typedef struct DYNAMIC_PARAM
 {
-    double MAX_Linear_velocity = 0.0;
+    double MAX_Linear_velocity = 1.0;
     double m_linear_vel = 0.0;
     double m_angular_vel = 0.0;
-    double m_dweight_kinematics_forward_drive_default = 600.0;
-    double m_dweight_kinematics_forward_drive_backward = 10.0;
 }DYNAMIC_PARAM;
 DYNAMIC_PARAM _pDynamic_param;
 
