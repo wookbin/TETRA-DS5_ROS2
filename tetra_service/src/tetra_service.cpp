@@ -323,7 +323,7 @@ public:
 
 		// Initialize the TF2 buffer and listener
         	tf2_buffer_ = std::make_shared<tf2_ros::Buffer>(this->get_clock());
-        	//tf2_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf2_buffer_);
+        	tf2_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf2_buffer_);
 
 		//publish list/////////////////////////////////////////////////////////////////////////////////////
 		//cmd_vel_publisher = this->create_publisher<geometry_msgs::msg::Twist>("cmd_vel", 10);
@@ -474,7 +474,7 @@ public:
 	rclcpp::TimerBase::SharedPtr timer_;
 	rclcpp::TimerBase::SharedPtr TF_timer_;
     	std::shared_ptr<tf2_ros::Buffer> tf2_buffer_;
-    	//std::shared_ptr<tf2_ros::TransformListener> tf2_listener_;
+    	std::shared_ptr<tf2_ros::TransformListener> tf2_listener_;
 
 	//Publisher ////////////////////////////////////////////////////////////////////////////////////////
 	rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr cmd_vel_publisher;
