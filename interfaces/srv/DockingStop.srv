@@ -1,0 +1,5 @@
+#This message is used to send command to tetra
+#Docking Stop command
+
+---
+bool command_result
