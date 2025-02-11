@@ -1,5 +1,0 @@
-#This message is used to send command to tetra
-# ros2 run collision_monitor Command
-
----
-bool command_result

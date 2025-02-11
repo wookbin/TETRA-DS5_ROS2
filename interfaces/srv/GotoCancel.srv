@@ -1,5 +1,0 @@
-#This message is used to send command to tetra
-#Goto Cancel command
-
----
-bool command_result

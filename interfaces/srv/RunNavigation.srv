@@ -1,6 +1,0 @@
-#This message is used to send command to tetra
-# ros2 run nav2 Command
-
-string map_name
----
-bool command_result
