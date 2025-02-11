@@ -1,0 +1,8 @@
+#Add Virtual Wall command
+
+geometry_msgs/Polygon[] polygons
+int32[] ids  # Array of IDs corresponding to polygons
+bool remove   # Use "remove" instead of "delete"
+---
+bool success
+string message
