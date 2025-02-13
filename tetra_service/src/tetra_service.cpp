@@ -181,25 +181,10 @@ typedef struct AR_TAG_POSE
     double m_dPositioning_Angle = 0.0;
     //Calc Odom to apriltag_TF
     double m_target_yaw = 0.0;
-	double m_target_theta = 0.0;
+    double m_target_theta = 0.0;
 
 }AR_TAG_POSE;
 AR_TAG_POSE _pAR_tag_pose;
-
-typedef struct LANDMARK_POSE
-{
-    string header_frame_id;
-    string ns;
-    int mark_id;
-    double pose_position_x;
-    double pose_position_y;
-    double pose_position_z;
-    double pose_orientation_x;
-    double pose_orientation_y;
-    double pose_orientation_z;
-    double pose_orientation_w;
-
-}LANDMARK_POSE;
 
 typedef struct LAND_MARK_POSE
 {
@@ -234,10 +219,10 @@ TF_POSE _pTF_pose;
 
 typedef struct ROBOT
 {
-	int  HOME_id = 0;
-	int  m_iDocking_id = 0;
-	bool m_bFalg_DockingExit = false;
-	int  m_iCallback_Battery = 0;
+    int  HOME_id = 0;
+    int  m_iDocking_id = 0;
+    bool m_bFalg_DockingExit = false;
+    int  m_iCallback_Battery = 0;
     int  m_iCallback_ErrorCode = 0;
     int  m_iCallback_EMG = 0;
     int  m_iCallback_Bumper = 0;
@@ -430,7 +415,7 @@ public:
 		set_pose_client_ = this->create_client<robot_localization::srv::SetPose>("set_pose");
 		
 		// Set Max Speed parameter client
-        set_speed_parameter_client_ = std::make_shared<rclcpp::AsyncParametersClient>(this, "controller_server");
+        	set_speed_parameter_client_ = std::make_shared<rclcpp::AsyncParametersClient>(this, "controller_server");
 
 		//Action list///////////////////////////////////////////////////////////////////////////////////////
 		nav_to_pose_action_client = rclcpp_action::create_client<NavigateToPose>(this, "navigate_to_pose");
@@ -459,8 +444,8 @@ public:
 
 	rclcpp::TimerBase::SharedPtr timer_;
 	rclcpp::TimerBase::SharedPtr TF_timer_;
-    std::shared_ptr<tf2_ros::Buffer> tf2_buffer_;
-    std::shared_ptr<tf2_ros::TransformListener> tf2_listener_;
+    	std::shared_ptr<tf2_ros::Buffer> tf2_buffer_;
+    	std::shared_ptr<tf2_ros::TransformListener> tf2_listener_;
 
 	//Publisher ////////////////////////////////////////////////////////////////////////////////////////
 	rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr cmd_vel_publisher;
@@ -616,8 +601,8 @@ public:
 			string strTF_frame_name = _pAR_tag_pose.m_strFamily + to_string(_pAR_tag_pose.m_iApril_tag_id);
 			//TF
 			rclcpp::Time now = this->get_clock()->now();
-            geometry_msgs::msg::TransformStamped transformStamped;
-            //transformStamped = tf2_buffer_->lookupTransform("camera", "tag36h11:0", tf2::TimePointZero);
+            		geometry_msgs::msg::TransformStamped transformStamped;
+            		//transformStamped = tf2_buffer_->lookupTransform("camera", "tag36h11:0", tf2::TimePointZero);
 			transformStamped = tf2_buffer_->lookupTransform("camera", strTF_frame_name, tf2::TimePointZero);
 
 			//position
@@ -732,11 +717,11 @@ public:
 		_pRobot.m_iCallback_Bumper = msg->data;
 
 		// // Fill in the header
-        // pointCloudMsg.header.stamp = this->get_clock()->now();
-        // pointCloudMsg.header.frame_id = "front_bumper";
+        	// pointCloudMsg.header.stamp = this->get_clock()->now();
+        	// pointCloudMsg.header.frame_id = "front_bumper";
 		// // Set the height and width of the point cloud
-        // pointCloudMsg.height = 1;
-        // pointCloudMsg.width = 1;
+	        // pointCloudMsg.height = 1;
+	        // pointCloudMsg.width = 1;
 		
 		
 		if(_pRobot.m_iCallback_Bumper != 0)
@@ -750,7 +735,7 @@ public:
 			if(!_pFlag_Value.m_bFlag_Disable_bumper)
 			{
 				LedToggleControl_Call(1, 10,100,10,1);
-    			ToggleOn_Call(18);
+    				ToggleOn_Call(18);
 				printf("[Bumper] Push Bumper!! _ RED LED On \n");
 		
 				// if(_pFlag_Value.m_bflagGo)
@@ -781,14 +766,14 @@ public:
 
 		}
 		// // Set the point step and row step
-        // pointCloudMsg.point_step = 16;
-        // pointCloudMsg.row_step = pointCloudMsg.point_step * pointCloudMsg.width;
-        // // Set the is_dense flag
-        // pointCloudMsg.is_dense = true;
-        // // Resize the data array and fill it with zeros (replace this with your own data)
-        // pointCloudMsg.data.resize(pointCloudMsg.row_step * pointCloudMsg.height, 0);
-        // // Publish the PointCloud2 message
-        // bumper_pointcloud_publisher->publish(std::move(pointCloudMsg));
+	        // pointCloudMsg.point_step = 16;
+	        // pointCloudMsg.row_step = pointCloudMsg.point_step * pointCloudMsg.width;
+	        // // Set the is_dense flag
+	        // pointCloudMsg.is_dense = true;
+	        // // Resize the data array and fill it with zeros (replace this with your own data)
+	        // pointCloudMsg.data.resize(pointCloudMsg.row_step * pointCloudMsg.height, 0);
+	        // // Publish the PointCloud2 message
+	        // bumper_pointcloud_publisher->publish(std::move(pointCloudMsg));
 
 	}
 
@@ -1208,20 +1193,20 @@ public:
 	{
 		//Reset robot localization reset call/////////////////////////////////////////////
 		auto request = std::make_shared<robot_localization::srv::SetPose::Request>();
-        // Fill the request with the desired pose
-        request->pose.pose.pose.position.x = 0.0; // Set desired x position
-        request->pose.pose.pose.position.y = 0.0; // Set desired y position
-        request->pose.pose.pose.position.z = 0.0; // Set desired z position
-        request->pose.pose.pose.orientation.x = 0.0; // Set desired orientation
-        request->pose.pose.pose.orientation.y = 0.0; // Set desired orientation
-        request->pose.pose.pose.orientation.z = 0.0; // Set desired orientation
-        request->pose.pose.pose.orientation.w = 1.0; // Set desired orientation
-        // Optionally set covariance
+	        // Fill the request with the desired pose
+	        request->pose.pose.pose.position.x = 0.0; // Set desired x position
+	        request->pose.pose.pose.position.y = 0.0; // Set desired y position
+	        request->pose.pose.pose.position.z = 0.0; // Set desired z position
+	        request->pose.pose.pose.orientation.x = 0.0; // Set desired orientation
+	        request->pose.pose.pose.orientation.y = 0.0; // Set desired orientation
+	        request->pose.pose.pose.orientation.z = 0.0; // Set desired orientation
+	        request->pose.pose.pose.orientation.w = 1.0; // Set desired orientation
+	        // Optionally set covariance
 		request->pose.pose.covariance[0] = 0.25;
 		request->pose.pose.covariance[6 * 1 + 1] = 0.25;
 		request->pose.pose.covariance[6 * 5 + 5] = 0.06853892326654787;
 		// Call the service
-        auto result_future = set_pose_client_->async_send_request(request);
+        	auto result_future = set_pose_client_->async_send_request(request);
 		///////////////////////////////////////////////////////////////////////////////////
 
 		initPose.header.stamp = rclcpp::Time();
@@ -1357,7 +1342,7 @@ public:
 
 		_pFlag_Value.m_bFlag_Initialpose = true;
 		LedToggleControl_Call(1,3,100,3,1);
-    	ToggleOn_Call(63);
+    		ToggleOn_Call(63);
 	}
 
 	void TF_CALC_Timer()
@@ -1365,9 +1350,9 @@ public:
 		try 
 		{
 			rclcpp::Time now = this->get_clock()->now();
-            // Lookup the transform from the target frame to "footprint"
-            geometry_msgs::msg::TransformStamped transformStamped;
-            transformStamped = tf2_buffer_->lookupTransform("odom", "base_footprint", tf2::TimePointZero);
+            		// Lookup the transform from the target frame to "footprint"
+            		geometry_msgs::msg::TransformStamped transformStamped;
+            		transformStamped = tf2_buffer_->lookupTransform("odom", "base_footprint", tf2::TimePointZero);
 
 			//position
 			_pTF_pose.poseTFx = transformStamped.transform.translation.x;
@@ -1396,8 +1381,8 @@ public:
         } 
 		catch (tf2::TransformException &ex) 
 		{
-            RCLCPP_WARN(this->get_logger(), "Could not transform odom to footprint: %s", ex.what());
-        }
+            		RCLCPP_WARN(this->get_logger(), "Could not transform odom to footprint: %s", ex.what());
+       		}
 
 	}
 
@@ -1517,7 +1502,7 @@ public:
 				case 1:
 					printf("Docking Loop 1 Start... \n");
 					LedToggleControl_Call(1,3,100,3,100);
-    				ToggleOn_Call(63);
+    					ToggleOn_Call(63);
 					m_iDocking_CommandMode = 2;
 					break;
 				case 2:
@@ -1556,7 +1541,7 @@ public:
 				case 6:
 					//printf("Docking End Loop 6... \n");
 					LedToggleControl_Call(1,3,100,3,100);
-    				ToggleOn_Call(9);
+    					ToggleOn_Call(9);
 					printf("TETRA POSE Reset! \n");
 					////PoseReset_call
 					Reset_Robot_Pose();
@@ -1568,7 +1553,7 @@ public:
 				case 9:
 					//printf("Docking FAIL ! \n");
 					LedToggleControl_Call(1, 10,100,10,1);
-    				ToggleOn_Call(18);
+    					ToggleOn_Call(18);
 
 					// m_iDocking_CommandMode = 119;
 					m_iDocking_CommandMode = 0;
@@ -1799,7 +1784,7 @@ public:
 	}
 
 	// Send Goal function//
-    void Set_goal(double position_x, double position_y, double position_z, 
+    	void Set_goal(double position_x, double position_y, double position_z, 
 				   double orientation_x, double orientation_y,double  orientation_z, double orientation_w) 
 	{
         //Wait Action server..
@@ -1809,7 +1794,7 @@ public:
 		}
 
 		auto goal_msg = NavigateToPose::Goal();
-        goal_msg.pose.header.stamp = this->now();
+        	goal_msg.pose.header.stamp = this->now();
 		goal_msg.pose.header.frame_id = "map";
 		goal_msg.pose.pose.position.x = position_x;
 		goal_msg.pose.pose.position.y = position_y;
@@ -1819,7 +1804,7 @@ public:
 		goal_msg.pose.pose.orientation.z = orientation_z;
 		goal_msg.pose.pose.orientation.w = orientation_w;
 
-        auto send_goal_options = rclcpp_action::Client<NavigateToPose>::SendGoalOptions();
+        	auto send_goal_options = rclcpp_action::Client<NavigateToPose>::SendGoalOptions();
 		send_goal_options.feedback_callback = std::bind(&TETRA_SERVICE::feedbackCallback, this, std::placeholders::_1, std::placeholders::_2);
 		send_goal_options.result_callback = std::bind(&TETRA_SERVICE::resultCallback, this, std::placeholders::_1);
 
@@ -1954,9 +1939,9 @@ public:
 		bool bResult = false;
 
 		// Update the desired_linear_vel parameter
-        auto parameters = std::vector<rclcpp::Parameter>();
-        parameters.emplace_back(rclcpp::Parameter("FollowPath.desired_linear_vel", request->max_speed));
-        set_speed_parameter_client_->set_parameters(parameters);
+        	auto parameters = std::vector<rclcpp::Parameter>();
+        	parameters.emplace_back(rclcpp::Parameter("FollowPath.desired_linear_vel", request->max_speed));
+        	set_speed_parameter_client_->set_parameters(parameters);
 		
 		/*
 		float32 max_speed
@@ -1991,7 +1976,7 @@ public:
 				if(_pFlag_Value.m_bflag_ComebackHome)
 				{
 					_pAR_tag_pose.m_iSelect_April_tag_id = m_dHome_ID; //0;
-        			m_iDocking_CommandMode = 1;
+        				m_iDocking_CommandMode = 1;
 					_pFlag_Value.m_bflag_ComebackHome = false;
 				}
 				break;
@@ -2129,7 +2114,7 @@ int main(int argc, char * argv[])
 
 	//LED On
 	node->LedToggleControl_Call(1,3,100,3,1);
-    node->ToggleOn_Call(63);
+    	node->ToggleOn_Call(63);
 
 	/////////////////////////////////////////////////////////////////
 	printf("□□■■■■□□□■■■■■■□□■■■■■□□□■□□□□□■□■□□□□■■■■□□□■■■■■■□\n");
@@ -2179,5 +2164,5 @@ int main(int argc, char * argv[])
     }
 
 	rclcpp::shutdown();
-    return 0;
+    	return 0;
 }
