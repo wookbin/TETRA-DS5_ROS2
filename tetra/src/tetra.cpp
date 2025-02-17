@@ -35,8 +35,8 @@ extern "C"
 #include <mutex>
 #include <condition_variable>
 
-#define WHEEL_RADIUS 0.1027 //0.1018 //m
-#define WHEEL_DISTANCE 0.4420 //0.438 //m
+#define WHEEL_RADIUS 0.1033 //m
+#define WHEEL_DISTANCE 0.4330 //m
 #define TREAD_WIDTH 0.04 //m
 
 using namespace std;
