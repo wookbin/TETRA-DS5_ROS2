@@ -56,7 +56,7 @@ controller_server:
       min_lookahead_dist: 0.45  # Large enough for the robot to navigate tight turns smoothly
       regulated_linear_scaling_min_radius: 0.9
       regulated_linear_scaling_min_speed: 0.25
-      rotate_to_heading_angular_vel: 1.2
+      rotate_to_heading_angular_vel: 1.0
       rotate_to_heading_min_angle: 0.785
       transform_tolerance: 0.1
       use_collision_detection: true
