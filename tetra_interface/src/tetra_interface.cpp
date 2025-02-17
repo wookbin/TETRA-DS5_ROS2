@@ -825,7 +825,7 @@ int main(int argc, char * argv[])
 
 	//init
 	node->current_time = node->now();
-    node->last_time = node->now();
+    	node->last_time = node->now();
 
 
 	rclcpp::WallRate loop_rate(30); //default: 30HZ
