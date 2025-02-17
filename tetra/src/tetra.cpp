@@ -228,9 +228,9 @@ public:
 	{
 		std::lock_guard<std::mutex> lock(mutex_);
 		m_bpending_ = true;
-        //RCLCPP_INFO(this->get_logger(), "Executing velCallback2 !!!!");
-        linear = vel->linear.x;
-        angular = vel->angular.z;
+        	//RCLCPP_INFO(this->get_logger(), "Executing velCallback2 !!!!");
+        	linear = vel->linear.x;
+        	angular = vel->angular.z;
 
 		if(linear == 0.0 && angular == 0.0)
 		{
@@ -465,7 +465,7 @@ int main(int argc, char * argv[])
 
 	//init
 	node->current_time = node->now();
-    node->last_time = node->now();
+    	node->last_time = node->now();
 	first = true;
 	for(int i=0;i<3;i++)
 	{
