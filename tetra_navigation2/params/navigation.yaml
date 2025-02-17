@@ -32,7 +32,7 @@ controller_server:
     # Progress checker parameters
     progress_checker:
       plugin: "nav2_controller::SimpleProgressChecker"
-      required_movement_radius: 0.5
+      required_movement_radius: 1.0
       movement_time_allowance: 10.0
     general_goal_checker:
       stateful: True
@@ -41,7 +41,7 @@ controller_server:
       yaw_goal_tolerance: 0.0174533 #0.25
     FollowPath:
       plugin: "nav2_regulated_pure_pursuit_controller::RegulatedPurePursuitController"
-      approach_velocity_scaling_dist: 1.0 #0.8
+      approach_velocity_scaling_dist: 1.0
       cost_scaling_dist: 0.3
       cost_scaling_gain: 1.0
       desired_linear_vel: 0.8
@@ -52,12 +52,12 @@ controller_server:
       max_angular_vel: 1.0 #1.2  # Allow sufficient angular velocity for tight turns
       max_lookahead_dist: 0.9
       max_robot_pose_search_dist: 10.0
-      min_approach_linear_velocity: 0.05 # 0.1
-      min_lookahead_dist: 0.45  # Large enough for the robot to navigate tight turns smoothly
-      regulated_linear_scaling_min_radius: 0.9
+      min_approach_linear_velocity: 0.0 #0.05
+      min_lookahead_dist: 0.4  # Large enough for the robot to navigate tight turns smoothly
+      regulated_linear_scaling_min_radius: 1.0
       regulated_linear_scaling_min_speed: 0.25
-      rotate_to_heading_angular_vel: 1.0
-      rotate_to_heading_min_angle: 0.785
+      rotate_to_heading_angular_vel: 0.785398
+      rotate_to_heading_min_angle: 0.785398
       transform_tolerance: 0.1
       use_collision_detection: true
       use_cost_regulated_linear_velocity_scaling: true  # Use costmap values for speed scaling
