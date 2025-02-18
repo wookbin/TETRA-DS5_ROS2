@@ -27,7 +27,6 @@
 #include "sensor_msgs/msg/laser_scan.hpp"
 #include "sensor_msgs/msg/point_cloud2.hpp"
 #include "sensor_msgs/point_cloud2_iterator.hpp"
-
 //tf2// 
 #include "tf2_ros/transform_broadcaster.h"
 #include "tf2/LinearMath/Quaternion.h"
@@ -36,7 +35,6 @@
 #include "tf2_ros/transform_listener.h"
 #include "tf2/exceptions.h"
 #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
-
 //Custom Service//
 #include "interfaces/srv/led_control.hpp"
 #include "interfaces/srv/led_toggle_control.hpp"
@@ -54,9 +52,6 @@
 #include "interfaces/srv/goto_cancel.hpp" //Goto Command Cancel
 #include "interfaces/srv/set_maxspeed.hpp" //Set Maxspeed
 
-//Virtual Obstacles add...
-//#include "interfaces/srv/add_virtual_obstacles.hpp"
-
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
 #include <pcl_conversions/pcl_conversions.h>
@@ -64,10 +59,8 @@
 //Action//
 #include "nav2_msgs/action/navigate_to_pose.hpp"
 #include "rclcpp_action/rclcpp_action.hpp"
-
 //apriltag_ros
 #include "apriltag_msgs/msg/april_tag_detection_array.hpp"
-
 //robot_localization Client service
 #include "robot_localization/srv/set_pose.hpp"
 
@@ -84,8 +77,6 @@
 using namespace std;
 using std::placeholders::_1;
 using namespace std::chrono_literals;
-
-
 #define HIGH_BATTERY 95
 #define LOW_BATTERY 15
 #define MAX_RETRY_CNT 10
@@ -125,7 +116,6 @@ typedef struct ODOMETRY
   double dOdom_euler_roll = 0.0;
   double dOdom_euler_pitch = 0.0;
   double dOdom_euler_yaw = 0.0;
-
   //calc rad to degree
   double dOdom_theta_deg = 0.0;
 
@@ -163,7 +153,7 @@ GOAL_POSE _pGoal_pose;
 //April_TAG Pose
 typedef struct AR_TAG_POSE
 {
-	string m_strFamily = "tag36h11:";
+    string m_strFamily = "tag36h11:";
     int m_iSelect_April_tag_id = 0;
     int m_iApril_tag_id = -1;
     double m_dApril_tag_pose_x = 0.0;
@@ -177,14 +167,14 @@ typedef struct AR_TAG_POSE
     double m_dApril_tag_pitch = 0.0;
     double m_dApril_tag_yaw = 0.0;
     //Transform AR Tag Axis -> Robot Axis
-	double m_transform_old_pose_x = 0.0;
+    double m_transform_old_pose_x = 0.0;
     double m_transform_old_pose_y = 0.0;
     double m_transform_pose_x = 0.0;
     double m_transform_pose_y = 0.0;
     double m_dPositioning_Angle = 0.0;
     //Calc Odom to apriltag_TF
     double m_target_yaw = 0.0;
-	double m_target_theta = 0.0;
+    double m_target_theta = 0.0;
 
 }AR_TAG_POSE;
 AR_TAG_POSE _pAR_tag_pose;
@@ -222,10 +212,10 @@ TF_POSE _pTF_pose;
 
 typedef struct ROBOT
 {
-	int  HOME_id = 0;
-	int  m_iDocking_id = 0;
-	bool m_bFalg_DockingExit = false;
-	int  m_iCallback_Battery = 0;
+    int  HOME_id = 0;
+    int  m_iDocking_id = 0;
+    bool m_bFalg_DockingExit = false;
+    int  m_iCallback_Battery = 0;
     int  m_iCallback_ErrorCode = 0;
     int  m_iCallback_EMG = 0;
     int  m_iCallback_Bumper = 0;
@@ -317,8 +307,8 @@ public:
 	{
 
 		// Initialize the TF2 buffer and listener
-        tf2_buffer_ = std::make_shared<tf2_ros::Buffer>(this->get_clock());
-        tf2_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf2_buffer_);
+        	tf2_buffer_ = std::make_shared<tf2_ros::Buffer>(this->get_clock());
+        	tf2_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf2_buffer_);
 
 		//publish list/////////////////////////////////////////////////////////////////////////////////////
 		//cmd_vel_publisher = this->create_publisher<geometry_msgs::msg::Twist>("cmd_vel", 10);
@@ -430,7 +420,7 @@ public:
 		set_pose_client_ = this->create_client<robot_localization::srv::SetPose>("set_pose");
 		
 		// Set Max Speed parameter client
-        set_speed_parameter_client_ = std::make_shared<rclcpp::AsyncParametersClient>(this, "controller_server");
+        	set_speed_parameter_client_ = std::make_shared<rclcpp::AsyncParametersClient>(this, "controller_server");
 
 		//Action list///////////////////////////////////////////////////////////////////////////////////////
 		nav_to_pose_action_client = rclcpp_action::create_client<NavigateToPose>(this, "navigate_to_pose");
@@ -459,8 +449,8 @@ public:
 
 	rclcpp::TimerBase::SharedPtr timer_;
 	rclcpp::TimerBase::SharedPtr TF_timer_;
-    std::shared_ptr<tf2_ros::Buffer> tf2_buffer_;
-    std::shared_ptr<tf2_ros::TransformListener> tf2_listener_;
+    	std::shared_ptr<tf2_ros::Buffer> tf2_buffer_;
+    	std::shared_ptr<tf2_ros::TransformListener> tf2_listener_;
 
 	//Publisher ////////////////////////////////////////////////////////////////////////////////////////
 	rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr cmd_vel_publisher;
@@ -481,9 +471,6 @@ public:
 	rclcpp::Subscription<geometry_msgs::msg::PoseWithCovarianceStamped>::SharedPtr initialpose_subscriber; //2D Pose Estimate
 	rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr cmd_vel_subscriber;
 	rclcpp::Subscription<nav_msgs::msg::OccupancyGrid>::SharedPtr map_subscriber;
-	//add... odometry
-	rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr odom_subscriber;
-
 	////Action/////////////////////////////////////////////////////////////////////////////////
 	using NavigateToPose = nav2_msgs::action::NavigateToPose;
   	using GoalHandleNavigateToPose = rclcpp_action::ClientGoalHandle<NavigateToPose>;
@@ -500,13 +487,9 @@ public:
 	//AMCL_
 	void AMCL_PaticleCloud_Callback(const nav2_msgs::msg::ParticleCloud::SharedPtr msg) //nav2_msgs::msg::ParticleCloud
 	{
-		//printf("######### Call AMCL_PaticleCloud_Callback !!\n");
 		auto m_request3 = std::make_shared<std_srvs::srv::Empty::Request>();
-
 		int m_iParticleCloud_size = 0;
 		m_iParticleCloud_size = msg->particles.size();
-
-		//printf("[amcl] m_iParticleCloud_size = %d \n", m_iParticleCloud_size);
 		if(m_iParticleCloud_size > 501 && _pDynamic_param.m_linear_vel == 0.0 && _pDynamic_param.m_angular_vel == 0.0 && _pFlag_Value.m_bFlag_Initialpose)
 		{
 			if(_pFlag_Value.m_bFlag_nomotion)
@@ -551,35 +534,6 @@ public:
 		}
 	}
 
-
-	/*
-	void odom_Callback(const nav_msgs::msg::Odometry::SharedPtr msg)
-	{
-		_pOdometry.dOdom_position_x = msg->pose.pose.position.x;
-		_pOdometry.dOdom_position_y = msg->pose.pose.position.y;
-		_pOdometry.dOdom_position_z = msg->pose.pose.position.z;
-		_pOdometry.dOdom_quaternion_x = msg->pose.pose.orientation.x;
-		_pOdometry.dOdom_quaternion_y = msg->pose.pose.orientation.y;
-		_pOdometry.dOdom_quaternion_z = msg->pose.pose.orientation.z;
-		_pOdometry.dOdom_quaternion_w = msg->pose.pose.orientation.w;
-
-		// Declaration of quaternion
-		tf2::Quaternion q;
-		q.setW(_pOdometry.dOdom_quaternion_w);
-		q.setX(_pOdometry.dOdom_quaternion_x);
-		q.setY(_pOdometry.dOdom_quaternion_y);
-		q.setZ(_pOdometry.dOdom_quaternion_z);
-		//<quaternion -> rotation Matrix
-		tf2::Matrix3x3 m(q);
-		// rotation Matrix -> quaternion
-		m.getRotation(q);
-		// rotation Matrix -> rpy
-		m.getRPY(_pOdometry.dOdom_euler_roll, _pOdometry.dOdom_euler_pitch, _pOdometry.dOdom_euler_yaw);
-		_pOdometry.dOdom_theta_deg = _pOdometry.dOdom_euler_yaw * (180.0/M_PI);
-		//printf("_pOdometry.dOdom_theta_deg: %.3f \n", _pOdometry.dOdom_theta_deg);
-	}
-	*/
-
 	//Joystick _Logitech F710 Gamepad
 	void joyCallback(const sensor_msgs::msg::Joy::SharedPtr joy)
 	{
@@ -616,7 +570,7 @@ public:
 			string strTF_frame_name = _pAR_tag_pose.m_strFamily + to_string(_pAR_tag_pose.m_iApril_tag_id);
 			//TF
 			rclcpp::Time now = this->get_clock()->now();
-            geometry_msgs::msg::TransformStamped transformStamped;
+            		geometry_msgs::msg::TransformStamped transformStamped;
 			transformStamped = tf2_buffer_->lookupTransform("camera", strTF_frame_name, tf2::TimePointZero);
 
 			//position
@@ -670,12 +624,6 @@ public:
 					_pAR_tag_pose.m_transform_pose_y = _pAR_tag_pose.m_transform_old_pose_y; 
 				}
 			}
-			// printf("m_transform_old_pose_x: %.5f \n", _pAR_tag_pose.m_transform_old_pose_x);
-			// printf("m_transform_old_pose_y: %.5f \n", _pAR_tag_pose.m_transform_old_pose_y);
-			// printf("_pAR_tag_pose_pose_x:   %.5f \n", _pAR_tag_pose.m_transform_pose_x);
-			// printf("_pAR_tag_pose_pose_y:   %.5f \n", _pAR_tag_pose.m_transform_pose_y);
-			// printf(" m_dPositioning_Angle:  %.5f \n", _pAR_tag_pose.m_dPositioning_Angle);
-			// printf("-----------------------------------------------\n");
 
 		}
 		else //No Maker
@@ -753,14 +701,12 @@ public:
 	void BumperCallback(const std_msgs::msg::Int32::SharedPtr msg)
 	{
 		_pRobot.m_iCallback_Bumper = msg->data;
-
 		// // Fill in the header
-        // pointCloudMsg.header.stamp = this->get_clock()->now();
-        // pointCloudMsg.header.frame_id = "front_bumper";
+		// pointCloudMsg.header.stamp = this->get_clock()->now();
+		// pointCloudMsg.header.frame_id = "front_bumper";
 		// // Set the height and width of the point cloud
-        // pointCloudMsg.height = 1;
-        // pointCloudMsg.width = 1;
-		
+		// pointCloudMsg.height = 1;
+		// pointCloudMsg.width = 1;
 		
 		if(_pRobot.m_iCallback_Bumper != 0)
 		{
@@ -773,7 +719,7 @@ public:
 			if(!_pFlag_Value.m_bFlag_Disable_bumper)
 			{
 				LedToggleControl_Call(1, 10,100,10,1);
-    			ToggleOn_Call(18);
+    				ToggleOn_Call(18);
 				printf("[Bumper] Push Bumper!! _ RED LED On \n");
 		
 				// if(_pFlag_Value.m_bflagGo)
@@ -803,7 +749,7 @@ public:
 			}
 
 		}
-		// // Set the point step and row step
+	// // Set the point step and row step
         // pointCloudMsg.point_step = 16;
         // pointCloudMsg.row_step = pointCloudMsg.point_step * pointCloudMsg.width;
         // // Set the is_dense flag
@@ -965,22 +911,21 @@ public:
 	{
 		//Reset robot localization reset call/////////////////////////////////////////////
 		auto request = std::make_shared<robot_localization::srv::SetPose::Request>();
-        // Fill the request with the desired pose
-        request->pose.pose.pose.position.x = 0.0; // Set desired x position
-        request->pose.pose.pose.position.y = 0.0; // Set desired y position
-        request->pose.pose.pose.position.z = 0.0; // Set desired z position
-        request->pose.pose.pose.orientation.x = 0.0; // Set desired orientation
-        request->pose.pose.pose.orientation.y = 0.0; // Set desired orientation
-        request->pose.pose.pose.orientation.z = 0.0; // Set desired orientation
-        request->pose.pose.pose.orientation.w = 1.0; // Set desired orientation
-        // Optionally set covariance
+	        // Fill the request with the desired pose
+	        request->pose.pose.pose.position.x = 0.0; // Set desired x position
+	        request->pose.pose.pose.position.y = 0.0; // Set desired y position
+	        request->pose.pose.pose.position.z = 0.0; // Set desired z position
+	        request->pose.pose.pose.orientation.x = 0.0; // Set desired orientation
+	        request->pose.pose.pose.orientation.y = 0.0; // Set desired orientation
+	        request->pose.pose.pose.orientation.z = 0.0; // Set desired orientation
+	        request->pose.pose.pose.orientation.w = 1.0; // Set desired orientation
+	        // Optionally set covariance
 		request->pose.pose.covariance[0] = 0.25;
 		request->pose.pose.covariance[6 * 1 + 1] = 0.25;
 		request->pose.pose.covariance[6 * 5 + 5] = 0.06853892326654787;
 		// Call the service
-        auto result_future = set_pose_client_->async_send_request(request);
+        	auto result_future = set_pose_client_->async_send_request(request);
 		///////////////////////////////////////////////////////////////////////////////////
-
 		initPose.header.stamp = rclcpp::Time();
 		initPose.header.frame_id = "map";
 		//position
@@ -995,9 +940,7 @@ public:
 		initPose.pose.covariance[0] = 0.25;
 		initPose.pose.covariance[6 * 1 + 1] = 0.25;
 		initPose.pose.covariance[6 * 5 + 5] = 0.06853892326654787;
-
 		initial_pose_publisher->publish(initPose);
-
 	}
 
 	bool Marker_Reset_Robot_Pose()
@@ -1114,7 +1057,7 @@ public:
 
 		_pFlag_Value.m_bFlag_Initialpose = true;
 		LedToggleControl_Call(1,3,100,3,1);
-    	ToggleOn_Call(63);
+    		ToggleOn_Call(63);
 	}
 
 	void TF_CALC_Timer()
@@ -1122,9 +1065,9 @@ public:
 		try 
 		{
 			rclcpp::Time now = this->get_clock()->now();
-            // Lookup the transform from the target frame to "footprint"
-            geometry_msgs::msg::TransformStamped transformStamped;
-            transformStamped = tf2_buffer_->lookupTransform("odom", "base_footprint", tf2::TimePointZero);
+		    	// Lookup the transform from the target frame to "footprint"
+		    	geometry_msgs::msg::TransformStamped transformStamped;
+		    	transformStamped = tf2_buffer_->lookupTransform("odom", "base_footprint", tf2::TimePointZero);
 
 			//position
 			_pTF_pose.poseTFx = transformStamped.transform.translation.x;
@@ -1150,11 +1093,11 @@ public:
 			m.getRPY(_pTF_pose.pose_euler_roll, _pTF_pose.pose_euler_pitch, _pTF_pose.pose_euler_yaw);
 			_pTF_pose.theta_deg = _pTF_pose.pose_euler_yaw * (180.0/M_PI);
 
-        } 
+        	} 
 		catch (tf2::TransformException &ex) 
 		{
-            RCLCPP_WARN(this->get_logger(), "Could not transform odom to footprint: %s", ex.what());
-        }
+            		RCLCPP_WARN(this->get_logger(), "Could not transform odom to footprint: %s", ex.what());
+        	}
 
 	}
 
@@ -1276,10 +1219,7 @@ public:
 				//printf("master_distance ->: %.5f \n", m_fdistance);
 				if(m_fdistance > 0.65)
 				{
-					//printf("master_distance Go: %.5f \n", m_fdistance);
 					cmd.linear.x = -1.0 * (m_fdistance /1.2) * 0.15; 
-					//printf("linear velocity: %.2f \n", cmd.linear.x );
-
 					if(cmd.linear.x > 1.0)
 					{
 						//Linear Over speed exit loop...
@@ -1290,7 +1230,6 @@ public:
 					}
 						
 					cmd.angular.z = -1.0 * atan2(_pAR_tag_pose.m_transform_old_pose_y, _pAR_tag_pose.m_transform_old_pose_x) / 1.25;
-					//printf("angular velocity: %.2f \n", cmd.angular.z);
 					if((cmd.angular.z > 1.0) || (cmd.angular.z < -1.0))
 					{
 						//Angular Over speed exit loop......
@@ -1299,7 +1238,6 @@ public:
 						printf("[Angular Over speed]: follower is closing \n");
 						return false;
 					}
-
 					cmd_vel_publisher->publish(cmd);
 					
 				}
@@ -1307,12 +1245,8 @@ public:
 				{
 					cmd.linear.x =  0.0;
 					cmd_vel_publisher->publish(cmd);
-					//printf("Tracking STOP !! \n");
-					//printf("master_distance Stop: %.5f \n", m_fdistance);
-
 					_pAR_tag_pose.m_target_yaw = _pAR_tag_pose.m_dApril_tag_pitch;
 					_pAR_tag_pose.m_target_theta = _pAR_tag_pose.m_dPositioning_Angle;
-
 					if(_pAR_tag_pose.m_target_yaw <= 0.0174533 && _pAR_tag_pose.m_target_yaw >= -0.0174533) //+- 1.0deg
 					{
 						m_iDocking_CommandMode = 4;
@@ -1368,7 +1302,7 @@ public:
 		bool bResult = false;
 		float m_fdistance = 0.0;
 		m_fdistance = sqrt(_pAR_tag_pose.m_transform_old_pose_x * _pAR_tag_pose.m_transform_old_pose_x + _pAR_tag_pose.m_transform_old_pose_y * _pAR_tag_pose.m_transform_old_pose_y);
-		printf("master_distance ->: %.5f \n", m_fdistance);
+		//printf("master_distance ->: %.5f \n", m_fdistance);
 		if(_pAR_tag_pose.m_target_yaw <= 0.0174533 && _pAR_tag_pose.m_target_yaw >= -0.0174533) //+- 1.0deg
 		{
 			m_iDocking_CommandMode = 4;
@@ -1394,8 +1328,6 @@ public:
 					cmd.linear.x = 1.0 * m_fdistance * 0.2;
 					cmd.angular.z = -1.0 * _pAR_tag_pose.m_target_yaw * 1.8;
 					cmd_vel_publisher->publish(cmd);
-					//sleep(2);
-					printf("yaw: %.5f | ++dir loop ! \n", _pAR_tag_pose.m_target_yaw );
 					m_iRotation_cnt ++;
 				}
 				
@@ -1427,8 +1359,6 @@ public:
 					cmd.linear.x = 1.0 * m_fdistance * 0.2;
 					cmd.angular.z = -1.0 * _pAR_tag_pose.m_target_yaw * 1.8;
 					cmd_vel_publisher->publish(cmd);
-					//sleep(2);
-					printf("yaw: %.5f | --dir loop ! \n", _pAR_tag_pose.m_target_yaw );
 					m_iRotation_cnt ++;
 				}
 				
@@ -1441,11 +1371,7 @@ public:
 				
 			m_iRotation_Mode = 1;
 		}
-	
-		//printf(" _pAR_tag_pose.m_target_yaw : %.3f \n",_pAR_tag_pose.m_target_yaw );
-		//printf("_pAR_tag_pose.m_target_theta: %.3f || _pTF_pose.theta_deg: %.3f \n", _pAR_tag_pose.m_target_theta, _pTF_pose.theta_deg);
 
-		
 		bResult = true;
 		return bResult;
 	}
@@ -1455,9 +1381,6 @@ public:
 		bool bResult = false;
 		float m_fdistance = 0.0;
 		m_fdistance = sqrt(_pAR_tag_pose.m_transform_old_pose_x * _pAR_tag_pose.m_transform_old_pose_x + _pAR_tag_pose.m_transform_old_pose_y * _pAR_tag_pose.m_transform_old_pose_y);
-		//printf("Yaw_tracking2_distance: %.3f \n", m_fdistance);
-		//printf("_pAR_tag_pose.m_target_theta : %.3f \n",_pAR_tag_pose.m_target_theta );
-
 		if(m_iBack_cnt < 30)
 		{
 			if(_pFlag_Value.m_bFlag_Obstacle_Center) 
@@ -1571,7 +1494,7 @@ public:
 				case 1:
 					printf("Docking Loop 1 Start... \n");
 					LedToggleControl_Call(1,3,100,3,100);
-    				ToggleOn_Call(63);
+    					ToggleOn_Call(63);
 					m_iDocking_CommandMode = 2;
 					break;
 				case 2:
@@ -1617,21 +1540,18 @@ public:
 				case 8:
 					printf("Docking End Loop 8... \n");
 					LedToggleControl_Call(1,3,100,3,100);
-    				ToggleOn_Call(9);
+    					ToggleOn_Call(9);
 					printf("TETRA POSE Reset! \n");
 					////PoseReset_call
 					Reset_Robot_Pose();
 					LedToggleControl_Call(1, 5,100,5,1);
 					ToggleOn_Call(63);
-
 					m_iDocking_CommandMode = 0;
-
 					break;
 				case 9:
 					//printf("Docking FAIL ! \n");
 					LedToggleControl_Call(1, 10,100,10,1);
-    				ToggleOn_Call(18);
-
+    					ToggleOn_Call(18);
 					// m_iDocking_CommandMode = 119;
 					m_iDocking_CommandMode = 0;
 					break;
@@ -1640,18 +1560,7 @@ public:
 					Depart_Station2Move();
 					break;
 				/****************************************************************/
-				case 11:
-					
-					break;
-				case 12:
-					
-					break;
-				case 13:
-					
-					break;
-				case 14:
-					
-					break;
+
 				/****************************************************************/
 				case 30:
 					
@@ -1708,11 +1617,8 @@ public:
 		const std::shared_ptr<interfaces::srv::DockingStop::Response> response)
 	{
 		bool bResult = false;
-
 		printf("[STOP Call]: Docking Stop !! \n");
-		
 		Docking_EXIT();
-
 		bResult = true;
 		response->command_result = bResult;
 		return true;
@@ -1723,18 +1629,14 @@ public:
 		const std::shared_ptr<interfaces::srv::SaveMap::Response> response)
 	{
 		bool bResult = false;
-
 		//call rosrun command//
 		string str_command = "gnome-terminal -- /home/tetra/mapsave.sh ";
 		string str_command2 = str_command + request->map_name.c_str();
-
 		std::vector<char> writable1(str_command2.begin(), str_command2.end());
 		writable1.push_back('\0');
 		char* ptr1 = &writable1[0];
 		int iResult = std::system(ptr1);
-
 		printf("Save Map Name: %s \n", request->map_name.c_str());	
-		
 		response->command_result = true;
 		return true;
 
@@ -1751,9 +1653,7 @@ public:
 		writable2.push_back('\0');
 		char* ptr2 = &writable2[0];
 		int iResult = std::system(ptr2);
-
 		ex_ilaunchMode = 1;
-
 		bResult = true;
 		response->command_result = bResult;
 		return bResult;
@@ -1765,7 +1665,6 @@ public:
 		const std::shared_ptr<interfaces::srv::RunNavigation::Response> response)
 	{
 		bool bResult = false;
-
 		printf("Load Map Call _ %s \n", request->map_name.c_str());		
 		string str_command = "gnome-terminal -- /home/tetra/navigation.sh ";
 		string str_command2 = str_command + request->map_name.c_str();
@@ -1773,9 +1672,7 @@ public:
 		writable3.push_back('\0');
 		char* ptr3 = &writable3[0];
 		int iResult = std::system(ptr3);
-
 		ex_ilaunchMode = 2;
-
 		bResult = true;
 		response->command_result = bResult;
 		return bResult;
@@ -1804,7 +1701,6 @@ public:
 		bool bumper
 		bool charging
 		*/
-
 		bResult = true;
 		response->command_result = bResult;
 		return bResult;
@@ -1857,14 +1753,14 @@ public:
     void Set_goal(double position_x, double position_y, double position_z, 
 				   double orientation_x, double orientation_y,double  orientation_z, double orientation_w) 
 	{
-        //Wait Action server..
+        	//Wait Action server..
 		while (!this->nav_to_pose_action_client->wait_for_action_server()) 
 		{
 			RCLCPP_INFO(get_logger(), "Waiting for action server...");
 		}
 
 		auto goal_msg = NavigateToPose::Goal();
-        goal_msg.pose.header.stamp = this->now();
+        	goal_msg.pose.header.stamp = this->now();
 		goal_msg.pose.header.frame_id = "map";
 		goal_msg.pose.pose.position.x = position_x;
 		goal_msg.pose.pose.position.y = position_y;
@@ -1874,7 +1770,7 @@ public:
 		goal_msg.pose.pose.orientation.z = orientation_z;
 		goal_msg.pose.pose.orientation.w = orientation_w;
 
-        auto send_goal_options = rclcpp_action::Client<NavigateToPose>::SendGoalOptions();
+        	auto send_goal_options = rclcpp_action::Client<NavigateToPose>::SendGoalOptions();
 		send_goal_options.feedback_callback = std::bind(&TETRA_SERVICE::feedbackCallback, this, std::placeholders::_1, std::placeholders::_2);
 		send_goal_options.result_callback = std::bind(&TETRA_SERVICE::resultCallback, this, std::placeholders::_1);
 
@@ -1887,14 +1783,11 @@ public:
 		const std::shared_ptr<interfaces::srv::GotoLocation::Response> response)
 	{
 		bool bResult = false;
-
 		//Clear Costmap Call
 		Clear_Costmap();
-
 		//LED Toggle Call
 		LedToggleControl_Call(1,3,100,3,1);
 		ToggleOn_Call(63); //White led
-	
 		//Location file load..
 		bResult = OpenLocationFile(request->location);
 		response->pose_x  = _pGoal_pose.goal_positionX;
@@ -1905,10 +1798,9 @@ public:
 		response->pose_qz = _pGoal_pose.goal_quarterZ;
 		response->pose_qw = _pGoal_pose.goal_quarterW;
 		
-
 		//Check robot status : noaml or docking?
 		if(_pRobot.m_iCallback_Charging_status <= 1 && (_pAR_tag_pose.m_iApril_tag_id == -1 || _pAR_tag_pose.m_transform_pose_x <= 0.5)) //Nomal
-    	{
+    		{
 			RCLCPP_INFO(get_logger(), "Goto Nomal Loop !!");
 
 			//Nav Goal call///////////////////////////////////////////////////////
@@ -1920,7 +1812,7 @@ public:
 		else
 		{
 			m_iDocking_CommandMode = 10; //Depart Move
-        	bResult = true;
+        		bResult = true;
 
 		}
 
@@ -2012,9 +1904,9 @@ public:
 		bool bResult = false;
 
 		// Update the desired_linear_vel parameter
-        auto parameters = std::vector<rclcpp::Parameter>();
-        parameters.emplace_back(rclcpp::Parameter("FollowPath.desired_linear_vel", request->max_speed));
-        set_speed_parameter_client_->set_parameters(parameters);
+        	auto parameters = std::vector<rclcpp::Parameter>();
+        	parameters.emplace_back(rclcpp::Parameter("FollowPath.desired_linear_vel", request->max_speed));
+        	set_speed_parameter_client_->set_parameters(parameters);
 		
 		/*
 		float32 max_speed
@@ -2092,9 +1984,9 @@ public:
         auto request = std::make_shared<interfaces::srv::LedToggleControl::Request>();
         request->de_index = de_index;
         request->light_accel = light_accel;
-		request->led_high_brightness = led_high_brightness;
-		request->light_decel = light_decel;
-		request->led_low_brightness = led_low_brightness;
+	request->led_high_brightness = led_high_brightness;
+	request->light_decel = light_decel;
+	request->led_low_brightness = led_low_brightness;
 
 
         auto result_future = led_toggle_control_client->async_send_request(
@@ -2128,18 +2020,18 @@ public:
         }
 
         if (!clear_entire_local_costmap_client->wait_for_service(std::chrono::seconds(1))) 
-		{
+	{
             RCLCPP_ERROR(this->get_logger(), "Clear local_Costmap Service not available.");
             return false;
         }
 
         // Create and send the request
         auto request = std::make_shared<nav2_msgs::srv::ClearEntireCostmap::Request>();
-		auto request2 = std::make_shared<nav2_msgs::srv::ClearEntireCostmap::Request>();
-		auto future = clear_entire_global_costmap_client->async_send_request(request);
+	auto request2 = std::make_shared<nav2_msgs::srv::ClearEntireCostmap::Request>();
+	auto future = clear_entire_global_costmap_client->async_send_request(request);
         auto future2 = clear_entire_local_costmap_client->async_send_request(request2);
         
-		return true;
+	return true;
     }
 
  
@@ -2187,8 +2079,7 @@ int main(int argc, char * argv[])
 
 	//LED On
 	node->LedToggleControl_Call(1,3,100,3,1);
-    node->ToggleOn_Call(63);
-
+    	node->ToggleOn_Call(63);
 	/////////////////////////////////////////////////////////////////
 	printf("□□■■■■□□□■■■■■■□□■■■■■□□□■□□□□□■□■□□□□■■■■□□□■■■■■■□\n");
 	printf("□■□□□□■□□■□□□□□□□■□□□□■□□■□□□□□■□■□□□■□□□□■□□■□□□□□□\n");
@@ -2201,7 +2092,6 @@ int main(int argc, char * argv[])
 	printf("□■□□□□■□□■□□□□□□□■□□□□■□□□□□■□□□□■□□□■□□□□■□□■□□□□□□\n");
 	printf("□□■■■■□□□■■■■■■□□■□□□□■□□□□□■□□□□■□□□□■■■■□□□■■■■■■□\n");
 	/////////////////////////////////////////////////////////////////   
-
 
 	while (rclcpp::ok() && !stop_requested)
 	{
@@ -2231,11 +2121,9 @@ int main(int argc, char * argv[])
 				}
 			}
 		}
-		
-	
 		loop_rate.sleep();
     }
 
 	rclcpp::shutdown();
-    return 0;
+    	return 0;
 }
