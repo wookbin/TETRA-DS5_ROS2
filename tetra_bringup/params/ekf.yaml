@@ -1,7 +1,7 @@
 ### ekf config file ###
 ekf_filter_node:
     ros__parameters:
-        frequency: 60.0
+        frequency: 50.0
         two_d_mode: true #false
         transform_time_offset: 0.0
         transform_timeout: 0.1
