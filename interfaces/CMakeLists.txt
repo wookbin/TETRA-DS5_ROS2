@@ -50,6 +50,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "srv/SaveMaker.srv"
   "srv/DockingStop.srv"
   "srv/SaveMap.srv"
+  "srv/DeleteMap.srv"
   "srv/RunMapping.srv"
   "srv/RunNavigation.srv"
   "srv/GetInformation.srv"
@@ -59,6 +60,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "srv/GotoCancel.srv"
   "srv/RunCollisionMonitor.srv"
   "srv/SetMaxspeed.srv"
+  "srv/Servo.srv"
   "msg/Gpio.msg"
   DEPENDENCIES builtin_interfaces geometry_msgs std_msgs std_srvs
 )
