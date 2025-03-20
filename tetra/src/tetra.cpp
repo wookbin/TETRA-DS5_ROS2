@@ -224,9 +224,9 @@ public:
 	{
 		std::unique_lock<std::mutex> lock(mutex_);
 		if(m_bpending_) return;
-        //RCLCPP_INFO(this->get_logger(), "Executing velCallback ");
-        linear = vel->linear.x;
-        angular = vel->angular.z;
+        	//RCLCPP_INFO(this->get_logger(), "Executing velCallback ");
+        	linear = vel->linear.x;
+        	angular = vel->angular.z;
 
 	}
 	void velCallback2(const geometry_msgs::msg::Twist::SharedPtr vel)
