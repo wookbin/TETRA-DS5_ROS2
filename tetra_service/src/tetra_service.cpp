@@ -1711,7 +1711,7 @@ public:
 		bool bResult = false;
 		printf("Load Map Call _ %s \n", request->map_name.c_str());		
 		string str_command = "gnome-terminal -- /home/tetra/navigation.sh ";
-		string str_command2 = str_command + request->map_name.c_str();
+		string str_command2 = str_command + request->map_name.c_str() + ".yaml";
 		std::vector<char> writable3(str_command2.begin(), str_command2.end());
 		writable3.push_back('\0');
 		char* ptr3 = &writable3[0];
