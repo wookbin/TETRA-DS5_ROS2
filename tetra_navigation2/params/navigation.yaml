@@ -202,7 +202,7 @@ global_costmap:
 
 map_server:
   ros__parameters:
-    yaml_filename: "office.yaml"
+    yaml_filename: "" #"office.yaml"
 
 planner_server:
   ros__parameters:
