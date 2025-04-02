@@ -516,6 +516,7 @@ public:
 		else
 		{
 			_pFlag_Value.m_bFlag_Initialpose = false;
+			_pFlag_Value.m_bFlag_nomotion = false;
 		}
 		
 	}
@@ -524,6 +525,7 @@ public:
 	{
 		//printf("## [2D Pose Estimate] InitialposeCallback ## \n");
   		_pFlag_Value.m_bFlag_Initialpose = true;
+		_pFlag_Value.m_bFlag_nomotion = true;
 
 	}
 
