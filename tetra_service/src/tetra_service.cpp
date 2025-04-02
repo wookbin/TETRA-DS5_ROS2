@@ -308,8 +308,8 @@ public:
 	{
 
 		// Initialize the TF2 buffer and listener
-        tf2_buffer_ = std::make_shared<tf2_ros::Buffer>(this->get_clock());
-        tf2_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf2_buffer_);
+        	tf2_buffer_ = std::make_shared<tf2_ros::Buffer>(this->get_clock());
+        	tf2_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf2_buffer_);
 
 		//publish list/////////////////////////////////////////////////////////////////////////////////////
 		//cmd_vel_publisher = this->create_publisher<geometry_msgs::msg::Twist>("cmd_vel", 10);
@@ -455,8 +455,8 @@ public:
 
 	rclcpp::TimerBase::SharedPtr timer_;
 	rclcpp::TimerBase::SharedPtr TF_timer_;
-    std::shared_ptr<tf2_ros::Buffer> tf2_buffer_;
-    std::shared_ptr<tf2_ros::TransformListener> tf2_listener_;
+    	std::shared_ptr<tf2_ros::Buffer> tf2_buffer_;
+    	std::shared_ptr<tf2_ros::TransformListener> tf2_listener_;
 
 	//Publisher ////////////////////////////////////////////////////////////////////////////////////////
 	rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr cmd_vel_publisher;
@@ -917,20 +917,20 @@ public:
 	{
 		//Reset robot localization reset call/////////////////////////////////////////////
 		auto request = std::make_shared<robot_localization::srv::SetPose::Request>();
-	    // Fill the request with the desired pose
-	    request->pose.pose.pose.position.x = 0.0; // Set desired x position
-	    request->pose.pose.pose.position.y = 0.0; // Set desired y position
-	    request->pose.pose.pose.position.z = 0.0; // Set desired z position
-	    request->pose.pose.pose.orientation.x = 0.0; // Set desired orientation
-	    request->pose.pose.pose.orientation.y = 0.0; // Set desired orientation
-	    request->pose.pose.pose.orientation.z = 0.0; // Set desired orientation
-	    request->pose.pose.pose.orientation.w = 1.0; // Set desired orientation
-	    // Optionally set covariance
+	    	// Fill the request with the desired pose
+	    	request->pose.pose.pose.position.x = 0.0; // Set desired x position
+	    	request->pose.pose.pose.position.y = 0.0; // Set desired y position
+	    	request->pose.pose.pose.position.z = 0.0; // Set desired z position
+	    	request->pose.pose.pose.orientation.x = 0.0; // Set desired orientation
+	    	request->pose.pose.pose.orientation.y = 0.0; // Set desired orientation
+	    	request->pose.pose.pose.orientation.z = 0.0; // Set desired orientation
+	    	request->pose.pose.pose.orientation.w = 1.0; // Set desired orientation
+	    	// Optionally set covariance
 		request->pose.pose.covariance[0] = 0.25;
 		request->pose.pose.covariance[6 * 1 + 1] = 0.25;
 		request->pose.pose.covariance[6 * 5 + 5] = 0.06853892326654787;
 		// Call the service
-        auto result_future = set_pose_client_->async_send_request(request);
+        	auto result_future = set_pose_client_->async_send_request(request);
 		///////////////////////////////////////////////////////////////////////////////////
 		initPose.header.stamp = rclcpp::Time();
 		initPose.header.frame_id = "map";
@@ -1063,7 +1063,7 @@ public:
 
 		_pFlag_Value.m_bFlag_Initialpose = true;
 		LedToggleControl_Call(1,3,100,3,1);
-    	ToggleOn_Call(63);
+    		ToggleOn_Call(63);
 	}
 
 	void TF_CALC_Timer()
@@ -1071,9 +1071,9 @@ public:
 		try 
 		{
 			rclcpp::Time now = this->get_clock()->now();
-		    // Lookup the transform from the target frame to "footprint"
-		    geometry_msgs::msg::TransformStamped transformStamped;
-		    transformStamped = tf2_buffer_->lookupTransform("odom", "base_footprint", tf2::TimePointZero);
+		    	// Lookup the transform from the target frame to "footprint"
+		    	geometry_msgs::msg::TransformStamped transformStamped;
+		    	transformStamped = tf2_buffer_->lookupTransform("odom", "base_footprint", tf2::TimePointZero);
 
 			//position
 			_pTF_pose.poseTFx = transformStamped.transform.translation.x;
@@ -1102,7 +1102,7 @@ public:
         	} 
 		catch (tf2::TransformException &ex) 
 		{
-            RCLCPP_WARN(this->get_logger(), "Could not transform odom to footprint: %s", ex.what());
+            		RCLCPP_WARN(this->get_logger(), "Could not transform odom to footprint: %s", ex.what());
         }
 
 	}
@@ -1794,7 +1794,7 @@ public:
 	}
 
 	// Send Goal function//
-    void Set_goal(double position_x, double position_y, double position_z, 
+    	void Set_goal(double position_x, double position_y, double position_z, 
 				   double orientation_x, double orientation_y,double  orientation_z, double orientation_w) 
 	{
         //Wait Action server..
@@ -1804,7 +1804,7 @@ public:
 		}
 
 		auto goal_msg = NavigateToPose::Goal();
-        goal_msg.pose.header.stamp = this->now();
+        	goal_msg.pose.header.stamp = this->now();
 		goal_msg.pose.header.frame_id = "map";
 		goal_msg.pose.pose.position.x = position_x;
 		goal_msg.pose.pose.position.y = position_y;
@@ -1814,13 +1814,13 @@ public:
 		goal_msg.pose.pose.orientation.z = orientation_z;
 		goal_msg.pose.pose.orientation.w = orientation_w;
 
-        auto send_goal_options = rclcpp_action::Client<NavigateToPose>::SendGoalOptions();
+        	auto send_goal_options = rclcpp_action::Client<NavigateToPose>::SendGoalOptions();
 		send_goal_options.feedback_callback = std::bind(&TETRA_SERVICE::feedbackCallback, this, std::placeholders::_1, std::placeholders::_2);
 		send_goal_options.result_callback = std::bind(&TETRA_SERVICE::resultCallback, this, std::placeholders::_1);
 
 		//Send Goal//
 		nav_to_pose_action_client->async_send_goal(goal_msg, send_goal_options);
-    }
+    	}
 
 	bool Goto_Location_Command(
 		const std::shared_ptr<interfaces::srv::GotoLocation::Request> request, 
@@ -1844,7 +1844,7 @@ public:
 		
 		//Check robot status : noaml or docking?
 		if(_pRobot.m_iCallback_Charging_status <= 1 && (_pAR_tag_pose.m_iApril_tag_id == -1 || _pAR_tag_pose.m_transform_pose_x <= 0.5)) //Nomal
-    	{
+    		{
 			RCLCPP_INFO(get_logger(), "Goto Nomal Loop !!");
 
 			//Nav Goal call///////////////////////////////////////////////////////
@@ -1948,9 +1948,9 @@ public:
 		bool bResult = false;
 
 		// Update the desired_linear_vel parameter
-        auto parameters = std::vector<rclcpp::Parameter>();
-        parameters.emplace_back(rclcpp::Parameter("FollowPath.desired_linear_vel", request->max_speed));
-        set_speed_parameter_client_->set_parameters(parameters);
+       		auto parameters = std::vector<rclcpp::Parameter>();
+        	parameters.emplace_back(rclcpp::Parameter("FollowPath.desired_linear_vel", request->max_speed));
+        	set_speed_parameter_client_->set_parameters(parameters);
 		
 		/*
 		float32 max_speed
@@ -2058,24 +2058,24 @@ public:
 		// Check if the service is available
 		if (!clear_entire_global_costmap_client->wait_for_service(std::chrono::seconds(1))) 
 		{
-            RCLCPP_ERROR(this->get_logger(), "Clear global_Costmap Service not available.");
-            return false;
-        }
+            		RCLCPP_ERROR(this->get_logger(), "Clear global_Costmap Service not available.");
+            		return false;
+        	}
 
-        if (!clear_entire_local_costmap_client->wait_for_service(std::chrono::seconds(1))) 
+	        if (!clear_entire_local_costmap_client->wait_for_service(std::chrono::seconds(1))) 
 		{
-            RCLCPP_ERROR(this->get_logger(), "Clear local_Costmap Service not available.");
-            return false;
-        }
+	            RCLCPP_ERROR(this->get_logger(), "Clear local_Costmap Service not available.");
+	            return false;
+	        }
 
-        // Create and send the request
-        auto request = std::make_shared<nav2_msgs::srv::ClearEntireCostmap::Request>();
+        	// Create and send the request
+        	auto request = std::make_shared<nav2_msgs::srv::ClearEntireCostmap::Request>();
 		auto request2 = std::make_shared<nav2_msgs::srv::ClearEntireCostmap::Request>();
 		auto future = clear_entire_global_costmap_client->async_send_request(request);
-        auto future2 = clear_entire_local_costmap_client->async_send_request(request2);
+        	auto future2 = clear_entire_local_costmap_client->async_send_request(request2);
         
 		return true;
-    }
+    	}
 
  
 private:
@@ -2123,7 +2123,7 @@ int main(int argc, char * argv[])
 
 	//LED On
 	node->LedToggleControl_Call(1,3,100,3,1);
-    node->ToggleOn_Call(63);
+    	node->ToggleOn_Call(63);
 	/////////////////////////////////////////////////////////////////
 	printf("□□■■■■□□□■■■■■■□□■■■■■□□□■□□□□□■□■□□□□■■■■□□□■■■■■■□\n");
 	printf("□■□□□□■□□■□□□□□□□■□□□□■□□■□□□□□■□■□□□■□□□□■□□■□□□□□□\n");
