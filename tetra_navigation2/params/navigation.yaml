@@ -114,8 +114,8 @@ local_costmap:
           max_obstacle_height: 2.0
           clearing: True
           marking: True
-          obstacle_max_range: 5.0
-          raytrace_max_range: 6.0
+          obstacle_max_range: 100.0
+          raytrace_max_range: 101.0
       stvl_layer:
         plugin: "spatio_temporal_voxel_layer/SpatioTemporalVoxelLayer"
         enabled: true
@@ -189,8 +189,8 @@ global_costmap:
           max_obstacle_height: 2.0
           clearing: True
           marking: True
-          obstacle_max_range: 5.0
-          raytrace_max_range: 6.0
+          obstacle_max_range: 100.0
+          raytrace_max_range: 101.0
       static_layer:
         plugin: "nav2_costmap_2d::StaticLayer"
         map_subscribe_transient_local: True
