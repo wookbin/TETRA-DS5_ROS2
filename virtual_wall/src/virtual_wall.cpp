@@ -209,8 +209,8 @@ public:
 						for (const auto& point32 : polygon.points) 
 						{
 							geometry_msgs::msg::Point point;
-							point.x = point32.x - m_dTF_calc_poseX;
-							point.y = point32.y - m_dTF_calc_poseY;
+							point.x = point32.x; // - m_dTF_calc_poseX;
+							point.y = point32.y; // - m_dTF_calc_poseY;
 							point.z = point32.z;
 							points.push_back(point);
 						}
