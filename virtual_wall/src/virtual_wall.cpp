@@ -358,7 +358,7 @@ public:
 	sensor_msgs::msg::PointCloud2 createPointCloud2(const std::vector<geometry_msgs::msg::Point>& dense_points) 
 	{
 		sensor_msgs::msg::PointCloud2 cloud_msg2;
-		cloud_msg2.header.frame_id = "odom"; // Ensure this matches the global frame
+		cloud_msg2.header.frame_id = "map"; // Ensure this matches the global frame
 		cloud_msg2.header.stamp = rclcpp::Clock().now();
 
 		cloud_msg2.height = 1;
