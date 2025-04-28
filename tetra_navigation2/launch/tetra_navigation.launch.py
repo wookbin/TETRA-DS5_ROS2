@@ -47,15 +47,9 @@ def generate_launch_description():
         'navigation.yaml'
     )
 
-    #map_file_path = os.path.join(
-    #    get_package_share_directory('tetra_navigation2'),
-    #    'maps',
-    #    'office.yaml'
-    #)
-    
     # Dynamically constructed paths
     map_file_path = PathJoinSubstitution([
-        pkg_bme_ros2_navigation, 'maps', LaunchConfiguration('map_name')
+        '/home/tetra/ros2_ws/src/tetra_navigation2', 'maps', LaunchConfiguration('map_name')
     ])
 
     localization_launch = IncludeLaunchDescription(
