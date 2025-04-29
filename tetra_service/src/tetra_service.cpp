@@ -1180,15 +1180,18 @@ public:
 									_pGoal_pose.goal_positionY = atof(ptr);
 									break;
 								case 2:
-									_pGoal_pose.goal_quarterX = atof(ptr);
+									_pGoal_pose.goal_positionZ = atof(ptr);
 									break;
 								case 3:
-									_pGoal_pose.goal_quarterY = atof(ptr);
+									_pGoal_pose.goal_quarterX = atof(ptr);
 									break;
 								case 4:
-									_pGoal_pose.goal_quarterZ = atof(ptr);  
+									_pGoal_pose.goal_quarterY = atof(ptr);
 									break;
 								case 5:
+									_pGoal_pose.goal_quarterZ = atof(ptr);  
+									break;
+								case 6:
 									_pGoal_pose.goal_quarterW = atof(ptr);
 									break;
 							}
