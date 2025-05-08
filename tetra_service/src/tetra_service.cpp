@@ -274,9 +274,11 @@ FALG_VALUE _pFlag_Value;
 //dynamic parameter//
 typedef struct DYNAMIC_PARAM
 {
-    double MAX_Linear_velocity = 1.0;
+    double MAX_Linear_velocity = 0.8;
     double m_linear_vel = 0.0;
     double m_angular_vel = 0.0;
+    bool m_bFlag_onetime = true;
+
 }DYNAMIC_PARAM;
 DYNAMIC_PARAM _pDynamic_param;
 
@@ -1823,6 +1825,12 @@ public:
 		send_goal_options.feedback_callback = std::bind(&TETRA_SERVICE::feedbackCallback, this, std::placeholders::_1, std::placeholders::_2);
 		send_goal_options.result_callback = std::bind(&TETRA_SERVICE::resultCallback, this, std::placeholders::_1);
 
+		// Update the desired_linear_vel parameter
+		auto parameters = std::vector<rclcpp::Parameter>();
+		parameters.emplace_back(rclcpp::Parameter("FollowPath.desired_linear_vel", _pDynamic_param.MAX_Linear_velocity));
+		set_speed_parameter_client_->set_parameters(parameters);
+		_pDynamic_param.m_bFlag_onetime = true;
+
 		//Send Goal//
 		nav_to_pose_action_client->async_send_goal(goal_msg, send_goal_options);
     	}
@@ -1956,6 +1964,10 @@ public:
        		auto parameters = std::vector<rclcpp::Parameter>();
         	parameters.emplace_back(rclcpp::Parameter("FollowPath.desired_linear_vel", request->max_speed));
         	set_speed_parameter_client_->set_parameters(parameters);
+
+		//MAX_Linear_velocity data save...//
+		_pDynamic_param.MAX_Linear_velocity = request->max_speed;
+		RCLCPP_INFO(get_logger(), "Set_MAX_Linear_velocity = %.3f", _pDynamic_param.MAX_Linear_velocity);
 		
 		/*
 		float32 max_speed
@@ -1970,7 +1982,21 @@ public:
 	//Navigation to Pose Feedback Callback//
 	void feedbackCallback(GoalHandleNavigateToPose::SharedPtr,const std::shared_ptr<const NavigateToPose::Feedback> feedback)
 	{
-		RCLCPP_INFO(get_logger(), "Distance remaininf = %f", feedback->distance_remaining);
+		//RCLCPP_INFO(get_logger(), "Distance remaininf = %f", feedback->distance_remaining);
+		if(_pDynamic_param.m_bFlag_onetime)
+		{
+			if(feedback->distance_remaining > 0.1 && feedback->distance_remaining < 1.5)
+			{
+				_pDynamic_param.m_bFlag_onetime = false;
+				RCLCPP_INFO(get_logger(), "Distance remaininf = %f", feedback->distance_remaining);
+
+				// Update the desired_linear_vel parameter -> 0.3m/s
+				auto parameters = std::vector<rclcpp::Parameter>();
+				parameters.emplace_back(rclcpp::Parameter("FollowPath.desired_linear_vel", 0.3));
+				set_speed_parameter_client_->set_parameters(parameters);
+				RCLCPP_INFO(get_logger(), "Set_desired_linear_vel = 0.3 m/s");
+			}
+		}
 	}
 
 	//Navigation to Pose Result Callback//
