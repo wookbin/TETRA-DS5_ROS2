@@ -434,11 +434,14 @@ public:
 		nav_to_pose_action_client = rclcpp_action::create_client<NavigateToPose>(this, "navigate_to_pose");
 
 		//PARAM
-		this->declare_parameter("m_dHome_ID", rclcpp::PARAMETER_INTEGER);
-		m_dHome_ID_param = this->get_parameter("m_dHome_ID");
-		//Get Param
-		m_dHome_ID = m_dHome_ID_param.as_int();
-		printf("## Get_parameter(m_dHome_ID): %d \n", m_dHome_ID);
+		try 
+		{
+			this->declare_parameter<int>("m_dHome_ID", 0);
+			m_dHome_ID = this->get_parameter("m_dHome_ID").as_int();
+			RCLCPP_INFO(this->get_logger(), "m_dHome_ID = %d", m_dHome_ID);
+		} catch (const std::exception& e) {
+			RCLCPP_ERROR(this->get_logger(), "Exception during parameter retrieval: %s", e.what());
+		}
 		
 		//Timer
 		timer_ = this->create_wall_timer(10ms, std::bind(&TETRA_SERVICE::DockingThread_function, this));
@@ -453,7 +456,6 @@ public:
 	geometry_msgs::msg::Twist cmd;
 	std_msgs::msg::Int32 pose_reset_data;
 	geometry_msgs::msg::PoseWithCovarianceStamped initPose;
-	rclcpp::Parameter m_dHome_ID_param;
 
 	rclcpp::TimerBase::SharedPtr timer_;
 	rclcpp::TimerBase::SharedPtr TF_timer_;
