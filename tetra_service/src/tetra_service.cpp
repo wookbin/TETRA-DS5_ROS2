@@ -1327,7 +1327,7 @@ public:
 
 		if(_pAR_tag_pose.m_target_yaw > 0) //[++dir] 
 		{
-			if(m_iRotation_cnt <= 50)
+			if(m_iRotation_cnt <= 100)
 			{
 				if(_pFlag_Value.m_bFlag_Obstacle_Center)
 				{
@@ -1358,7 +1358,7 @@ public:
 		}
 		else //[--dir] 
 		{
-			if(m_iRotation_cnt <= 50)
+			if(m_iRotation_cnt <= 100)
 			{
 				if(_pFlag_Value.m_bFlag_Obstacle_Center)
 				{
