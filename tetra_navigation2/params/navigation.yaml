@@ -296,43 +296,42 @@ collision_monitor:
       visualize: True
       enabled: True
       polygon_pub_topic: "velocity_polygon_slow"
-      velocity_polygons: ["rotation", "translation_forward_high", "translation_forward_low", "translation_backward", "stopped"]
+      velocity_polygons: ["translation_forward_high", "translation_forward_low", "translation_backward", "stopped"]
       holonomic: false
-      #slowdown_ratio: 0.4
-      rotation:
-        points: "[[0.249575, 0.285], [0.249575, -0.285], [-0.4, -0.285], [-0.4, 0.285]]"
-        linear_min: 0.0
-        linear_max: 0.05
-        theta_min: -1.5
-        theta_max: 1.5
       translation_forward_high:
-        points: "[[1.3, 0.35], [1.3, -0.35], [-0.4, -0.35], [-0.4, 0.35]]"
+        points: "[[1.1675, 0.315], [1.1675, -0.315], [-0.32, -0.315], [-0.32, 0.315]]"
         linear_min: 0.7
         linear_max: 1.5
         theta_min: -1.5
         theta_max: 1.5
       translation_forward_low:
-        points: "[[0.8, 0.35], [0.8, -0.35], [-0.4, -0.35], [-0.4, 0.35]]"
-        linear_min: 0.4
+        points: "[[0.5, 0.315], [0.5, -0.315], [-0.32, -0.315], [-0.32, 0.315]]"
+        linear_min: 0.3
         linear_max: 0.699
         theta_min: -1.5
         theta_max: 1.5
       translation_backward:
-        points: "[[0.2, 0.285], [0.2, -0.285], [-0.5, -0.285], [-0.5, 0.285]]"
-        linear_min: -0.5
-        linear_max: 0.0
+        points: "[[0.2, 0.315], [0.2, -0.315], [-0.6, -0.315], [-0.6, 0.315]]"
+        linear_min: -1.0
+        linear_max: -0.05
         theta_min: -1.5
         theta_max: 1.5
       stopped:
-        points: "[[0.249575, 0.285], [0.249575, -0.285], [-0.4, -0.285], [-0.4, 0.285]]"
-        linear_min: -0.8
-        linear_max: 0.8
+        points: "[[0.2, 0.25], [0.2, -0.25], [-0.35, -0.25], [-0.35,  0.25]]"
+        linear_min: 0.0
+        linear_max: 0.0
         theta_min: -1.5
         theta_max: 1.5
-    observation_sources: ["scan"]
+    observation_sources: ["scan", "scan2"]
     scan:
       type: "scan"
       topic: "scan"
+      min_height: 0.15
+      max_height: 2.0
+      enabled: True
+    scan2:
+      type: "scan"
+      topic: "scan2"
       min_height: 0.15
       max_height: 2.0
       enabled: True
