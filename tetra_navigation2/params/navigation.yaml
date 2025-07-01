@@ -4,15 +4,20 @@ bt_navigator:
     robot_base_frame: base_footprint
     odom_topic: /odom
     bt_loop_duration: 10
-    default_server_timeout: 20
+    default_server_timeout: 60 #20
     wait_for_service_timeout: 1000
     action_server_result_timeout: 900.0
     navigators: ["navigate_to_pose", "navigate_through_poses"]
     navigate_to_pose:
       plugin: "nav2_bt_navigator::NavigateToPoseNavigator"
+      bt_xml_filename: "/home/tetra/ros2_ws/src/tetra_navigation2/behavior_trees/navigate_to_pose_w_replanning_and_recovery.xml"
+
     navigate_through_poses:
       plugin: "nav2_bt_navigator::NavigateThroughPosesNavigator"
+      bt_xml_filename: "/home/tetra/ros2_ws/src/tetra_navigation2/behavior_trees/navigate_through_poses_w_replanning_and_recovery.xml"
 
+    use_feedback: true
+    
     error_code_names:
       - compute_path_error_code
       - follow_path_error_code
