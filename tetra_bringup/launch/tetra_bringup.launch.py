@@ -139,7 +139,7 @@ def generate_launch_description():
 		# cygbot 2D lidar
 		IncludeLaunchDescription(
 		PythonLaunchDescriptionSource(
-			[get_package_share_directory('cyglidar_d1_ros2'), '/launch/cyglidar.launch.py']),
+			[get_package_share_directory('cyglidar_d2_ros2'), '/launch/cyglidar.launch.py']),
 		),
 		
 		# realsense D455
