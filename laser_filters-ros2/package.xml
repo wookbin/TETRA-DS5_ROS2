@@ -1,0 +1,38 @@
+<package format="3">
+  <name>laser_filters</name>
+  <description>
+    Assorted filters designed to operate on 2D planar laser scanners,
+    which use the sensor_msgs/LaserScan type.
+  </description>
+  <version>2.0.8</version>
+  <maintainer email="jon.binney@gmail.com">Jon Binney</maintainer>
+  <author>Tully Foote</author>
+  <license>BSD</license>
+
+  <url>http://ros.org/wiki/laser_filters</url>
+
+  <build_depend>ament_cmake_auto</build_depend>
+
+  <depend>angles</depend>
+  <depend>diagnostic_msgs</depend>
+  <depend>diagnostic_updater</depend>
+  <depend>filters</depend>
+  <depend>laser_geometry</depend>
+  <depend>message_filters</depend>
+  <depend>pluginlib</depend>
+  <depend>rclcpp</depend>
+  <depend>rclcpp_lifecycle</depend>
+  <depend>rclcpp_components</depend>
+  <depend>sensor_msgs</depend>
+  <depend>tf2</depend>
+  <depend>tf2_geometry_msgs</depend>
+  <depend>tf2_ros</depend>
+  <depend>tf2_kdl</depend>
+
+  <test_depend>ament_cmake_gtest</test_depend>
+  <test_depend>launch_testing_ament_cmake</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

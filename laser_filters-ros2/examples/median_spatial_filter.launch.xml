@@ -1,0 +1,5 @@
+<launch>
+    <node name="scan_to_scan_filter_chain" pkg="laser_filters" exec="scan_to_scan_filter_chain" output="screen">
+        <param from="$(find-pkg-share laser_filters)/examples/median_spatial_filter_example.yaml" />
+    </node>
+</launch>

@@ -1,0 +1,17 @@
+scan_to_scan_filter_chain:
+  ros__parameters:
+    filter1:
+      name: median_spatial
+      type: laser_filters/LaserScanMedianSpatialFilter
+      params:
+        window_size: 31
+    filter2:
+      name: median_filter
+      type: laser_filters/LaserArrayFilter
+      params:
+        range_filter_chain:
+          filter1:
+            name: median
+            type: filters/MultiChannelMedianFilterFloat
+            params:
+              number_of_observations: 3
