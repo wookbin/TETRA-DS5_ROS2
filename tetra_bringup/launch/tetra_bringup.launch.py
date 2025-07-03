@@ -129,6 +129,12 @@ def generate_launch_description():
 		PythonLaunchDescriptionSource(
 			[get_package_share_directory('sick_scan_xd'), '/launch/sick_tim_5xx.launch.py']),
 		),
+
+		# laser filter (shadow_filter)
+		IncludeLaunchDescription(
+		PythonLaunchDescriptionSource(
+			[get_package_share_directory('laser_filters'), '/examples/shadow_filter_example.launch.py']),
+		),
 		
 		# cygbot 2D lidar
 		IncludeLaunchDescription(
